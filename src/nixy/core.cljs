@@ -2,18 +2,27 @@
   (:require
    [goog.dom :as gdom]))
 
-(println "This text is printed from src/nixy/core.cljs. Go ahead and edit it and see reloading in action.")
-
 (defn multiply [a b] (* a b))
 
+(def initial-state
+  {:file-system
+   {}
+   
+   :character
+   {:appearance
+    {:blinking :true
+     :color "#fff"}
+    :speech-bubble-text []}
 
-;; define your app data so that it doesn't get over-written on reload
-(defonce app-state (atom {:text "Hello world!"}))
+   :terminal
+   {:line-chars []
+    :line-guide {}
+    :line-history []}})
+
+(defonce app-state (atom initial-state))
 
 (defn get-app-element []
   (gdom/getElement "app"))
-
-
 
 ;; specify reload hook with ^;after-load metadata
 (defn ^:after-load on-reload []
