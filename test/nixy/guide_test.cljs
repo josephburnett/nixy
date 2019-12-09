@@ -4,7 +4,8 @@
    [nixy.guide :as ng]))
 
 (def test-state
-  {:filesystem
+  {:cwd ["etc"]
+   :filesystem
    {"etc"
     {"badfile" {:mod #{:r}
                 :contents "10110"}}}})
@@ -18,3 +19,8 @@
   (is (not ((ng/dir-exists "etc" "badfile") test-state)))
   (is (not ((ng/dir-exists "etc" "goodfile") test-state)))
   (is ((ng/dir-exists "etc") test-state)))
+
+(deftest cwd-test
+  (is (not ((ng/cwd) test-state)))
+  (is ((ng/cwd "etc") test-state))
+  (is (not ((ng/cwd "etc" "badfile")))))
