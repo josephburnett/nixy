@@ -11,11 +11,22 @@
 (defn cwd [& path]
   #(= (:cwd %) path))
 
+
 (def levels
+
   [{:level 0
     :prereq [(file-exists "etc" "badfile")]
-    :suggest ["cd etc"]}
+    ; :before (modify state)
+    ; :after  (modify state)
+    :suggest ["cd etc"]
+    :say ["I've got a bad file stuck in my filesystem."
+          "You can find it in the /etc directory."]
+    }
+
    {:level 1
     :prereq [(file-exists "etc" "badfile")
              (cwd "etc")]
-    :suggest ["rm badfile"]}])
+    ; :before (modify state)
+    ; :after  (modify state)
+    :suggest ["rm badfile"]
+    :say ["Please remove the bad file for me."]}])
