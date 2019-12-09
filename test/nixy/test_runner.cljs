@@ -3,6 +3,7 @@
   (:require
     ;; require all the namespaces that you want to test
     [nixy.core-test]
+    [nixy.guide-test]
     [figwheel.main.testing :refer [run-tests-async]]))
 
 (defn -main [& args]
