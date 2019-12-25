@@ -25,7 +25,7 @@
     :speech-bubble-text []}
 
    :terminal
-   {:chars []
+   {:line ""
     :guide {}}})
 
 (defonce app-state (atom initial-state))
