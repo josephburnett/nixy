@@ -1,16 +1,17 @@
-(ns nixy.guide)
+(ns ^:figwheel-hooks nixy.guide
+  (:require
+   [clojure.string :as str]))
 
 (defn file-exists [& path]
   #(if-let [file (get-in (:filesystem %) path)]
-     (contains? file :contents)))
+     (contains? file :mod)))
 
 (defn dir-exists [& path]
   #(if-let [file (get-in (:filesystem %) path)]
-     (not (contains? file :contents))))
+     (not (contains? file :mod))))
 
 (defn cwd [& path]
   #(= (:cwd %) path))
-
 
 (def levels
 
@@ -30,3 +31,16 @@
     ; :after  (modify state)
     :suggest ["rm badfile"]
     :say ["Please remove the bad file for me."]}])
+
+(def valid-keys
+  ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l"
+   "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x"
+   "y" "z" " "])
+
+(defn pred-args->guide [pred args]
+  (reduce
+   #(if (pred (str/join (concat args %2)))
+      (assoc %1 %2 {})
+      %1)
+   {}
+   valid-keys))

@@ -1,12 +1,17 @@
 (ns ^:figwheel-hooks nixy.core
   (:require
-   [goog.dom :as gdom]))
+   [goog.dom :as gdom]
+   [goog.events :as gevents]))
 
 (defn multiply [a b] (* a b))
 
 (def initial-state
   {:file-system
-   {}
+   {"bin"
+    {"cd"
+     {:mod #{:x}
+      :x #(print "cd" %)
+      :args #(contains? #{"a" "b"} %)}}}
 
    ;; TODO: update this on the 'resize' event.
    :view
@@ -20,9 +25,8 @@
     :speech-bubble-text []}
 
    :terminal
-   {:line-chars []
-    :line-guide {}
-    :line-history []}})
+   {:chars []
+    :guide {}}})
 
 (defonce app-state (atom initial-state))
 
@@ -53,3 +57,12 @@
 ;; specify reload hook with ^;after-load metadata
 (defn ^:after-load on-reload []
   (render))
+
+(defn on-key-down [e]
+  (print (.-key e)))
+
+(gevents/listen
+ js/window
+ goog.events.EventType.KEYDOWN
+ on-key-down)
+                 
