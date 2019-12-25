@@ -1,17 +1,19 @@
 (ns ^:figwheel-hooks nixy.core
   (:require
+   [nixy.guide :as ng]
+   [clojure.string :as str]
    [goog.dom :as gdom]
    [goog.events :as gevents]))
 
 (defn multiply [a b] (* a b))
 
 (def initial-state
-  {:file-system
+  {:filesystem
    {"bin"
     {"cd"
      {:mod #{:x}
       :x #(print "cd" %)
-      :args #(contains? #{"a" "b"} %)}}}
+      :args #(contains? #{" " " a"} %)}}}
 
    ;; TODO: update this on the 'resize' event.
    :view
@@ -28,8 +30,7 @@
    {:line ""
     :guide {}}})
 
-(defonce app-state (atom initial-state))
-
+(def app-state (atom initial-state))
 
 ; TODO: resize based on width and height
 (defn draw-nixy [ctx state]
@@ -58,8 +59,20 @@
 (defn ^:after-load on-reload []
   (render))
 
+(defn append-state-terminal-line [state key]
+  (as-> state s
+    (assoc-in s [:terminal :line] (str/join (concat (get-in s [:terminal :line]) key)))
+    (assoc-in s [:terminal :guide] (ng/state->guide s))))
+
+;; force initial calculation of guide
+(reset! app-state (append-state-terminal-line @app-state ""))
+
 (defn on-key-down [e]
-  (print (.-key e)))
+  (let [key (.-key e)
+        state @app-state]
+    (when (contains? (get-in state [:terminal :guide]) key)
+      (reset! app-state (append-state-terminal-line state key)))
+    (print (get-in @app-state [:terminal :line]))))
 
 (gevents/listen
  js/window
