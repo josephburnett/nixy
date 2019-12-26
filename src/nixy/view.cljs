@@ -1,4 +1,4 @@
-(ns nixy.character
+(ns nixy.view
   (:require
    [nixy.state :as state]
    [goog.dom :as gdom]))

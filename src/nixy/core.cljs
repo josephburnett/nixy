@@ -1,6 +1,6 @@
 (ns ^:figwheel-hooks nixy.core
   (:require
-   [nixy.character :as character]
+   [nixy.view :as view]
    [nixy.guide :as guide]
    [nixy.state :as state]
    [clojure.string :as str]
@@ -8,7 +8,7 @@
 
 ;; specify reload hook with ^;after-load metadata
 (defn ^:after-load on-reload []
-  (character/render))
+  (view/render))
 
 (defn append-state-terminal-line [current-state key]
   (update-in
@@ -23,11 +23,11 @@
       (reset!
        state/app-state
        (append-state-terminal-line current-state key))
-      (character/render))))
+      (view/render))))
 
 (gevents/listen
  js/window
  goog.events.EventType.KEYDOWN
  on-key-down)
 
-(character/render)
+(view/render)
