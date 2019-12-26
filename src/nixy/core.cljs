@@ -23,7 +23,7 @@
       (reset!
        state/app-state
        (append-state-terminal-line current-state key))
-      (print (get-in @state/app-state [:terminal :line])))))
+      (character/render))))
 
 (gevents/listen
  js/window

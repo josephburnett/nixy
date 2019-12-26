@@ -21,6 +21,6 @@
 
    :terminal
    {:line ""
-    :guide {}}})
+    :output []}})
 
 (def app-state (atom initial-state))
