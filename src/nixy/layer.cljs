@@ -1,4 +1,4 @@
-(ns ^:figwheel-hooks nixy.level)
+(ns ^:figwheel-hooks nixy.layer)
 
 (defn file-exists [& path]
   #(if-let [file (get-in (:filesystem %) path)]
