@@ -18,11 +18,15 @@
 (defn state->guide [state]
   (let [line (get-in state [:terminal :line])
         command-names (keys (get-in state [:filesystem "bin"]))]
-    (if-let [name (first (filter #(str/starts-with? line %) command-names))]
+    (if-let [name (->> command-names
+                       (filter #(str/starts-with? line %))
+                       first)]
       ;; guide from command arguments predicate
       (let [command (get-in state [:filesystem "bin" name])
             args (subs line (count name))]
         (pred-args->guide :args (:args command) args))
       ;; guide from list of possible commands
-      (let [pred (fn [l] (not (empty? (filter #(str/starts-with? % l) command-names))))]
+      (let [pred (fn [l] (->> command-names
+                              (filter #(str/starts-with? % l))
+                              ((complement empty?))))]
         (pred-args->guide :command pred line)))))
