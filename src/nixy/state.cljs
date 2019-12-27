@@ -3,10 +3,18 @@
 (def ^:private initial-state
   {:filesystem
    {"bin"
-    {"cd"
+    {"ls"
      {:mod #{:x}
-      :x #(print "cd" %)
-      :args #(contains? #{" " " a"} %)}}}
+      :exec (fn [current-state]
+              (update-in
+               current-state [:terminal :output]
+               #(let [names (as-> current-state s
+                              (get-in s (concat [:filesystem] (:cwd s)))
+                              (keys s))]
+                  (concat % names))))
+      :args-pred #(= "\n" %)}}}
+
+   :cwd []
 
    ;; TODO: update this on the 'resize' event.
    :view
@@ -21,6 +29,8 @@
 
    :terminal
    {:line ""
-    :output []}})
+    :output []}
+
+   :errors []})
 
 (def app-state (atom initial-state))

@@ -18,10 +18,10 @@
     (is (= (given " var") {}))))
 
 (deftest state->guide-test
-  (let [state {:filesystem {"bin" {"cd" {:args #(str/starts-with? " a" %)}}}}
+  (let [state {:filesystem {"bin" {"cd" {:args-pred #(str/starts-with? " a\n" %)}}}}
         given #(ng/state->guide (assoc-in state [:terminal :line] %))]
     (is (= (given "") {"c" #{:command}}))
     (is (= (given "c") {"d" #{:command}}))
     (is (= (given "cd") {" " #{:args}}))
     (is (= (given "cd ") {"a" #{:args}}))
-    (is (= (given "cd a") {}))))
+    (is (= (given "cd a") {"\n" #{:args}}))))

@@ -5,7 +5,7 @@
 (def valid-keys
   ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l"
    "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x"
-   "y" "z" " "])
+   "y" "z" " " "\n"])
 
 (defn pred-args->guide [tag pred args]
   (reduce
@@ -24,7 +24,7 @@
       ;; guide from command arguments predicate
       (let [command (get-in state [:filesystem "bin" name])
             args (subs line (count name))]
-        (pred-args->guide :args (:args command) args))
+        (pred-args->guide :args (:args-pred command) args))
       ;; guide from list of possible commands
       (let [pred (fn [l] (->> command-names
                               (filter #(str/starts-with? % l))

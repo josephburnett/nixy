@@ -8,13 +8,32 @@
    current-state [:terminal :line]
    #(str/join (concat % key))))
 
+(defn- run-command [current-state]
+  (let [line (get-in current-state [:terminal :line])]
+    (if-let [name (as-> current-state s
+                    (get-in s [:filesystem "bin"])
+                    (keys s)
+                    (filter #(str/starts-with? line %) s) 
+                    (first s))]
+      ;; Run the command with current state and arguments
+      (let [args (subs line (count name))
+            command (get-in current-state [:filesystem "bin" name])]
+        (print "running command " name)
+        (as-> current-state s
+          ((:exec command) s args)
+          (assoc-in s [:terminal :line] "")))
+      ;; Command not found
+      (update-in
+       current-state [:errors]
+       #(cons (str "command not found: " line) %)))))
+
 (defn press-key [current-state key]
   (let [current-guide (guide/state->guide current-state)]
     (cond
       ;; Run a complete command
       (and (= "Enter" key)
-           (contains? current-guide ""))
-      current-state ; TODO: run the command
+           (contains? current-guide "\n"))
+      (run-command current-state)
       ;; Delete characters
       (= "Backspace" key)
       (update-in
