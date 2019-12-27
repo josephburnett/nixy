@@ -1,18 +1,14 @@
-(ns nixy.state)
+(ns nixy.state
+  (:require
+   [nixy.command.ls :as ls]))
 
 (def ^:private initial-state
   {:filesystem
    {"bin"
     {"ls"
      {:mod #{:x}
-      :exec (fn [current-state]
-              (update-in
-               current-state [:terminal :output]
-               #(let [names (as-> current-state s
-                              (get-in s (concat [:filesystem] (:cwd s)))
-                              (keys s))]
-                  (concat % names))))
-      :args-pred #(= "\n" %)}}}
+      :exec ls/exec
+      :args-pred ls/args-pred}}}
 
    :cwd []
 
