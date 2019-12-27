@@ -8,17 +8,17 @@
 
 ;; specify reload hook with ^;after-load metadata
 (defn ^:after-load on-reload []
-  (view/render))
+  (view/render @state/app-state))
 
 (defn on-key-down [e]
   (reset!
    state/app-state
    (terminal/press-key @state/app-state (.-key e)))
-  (view/render))
+  (view/render @state/app-state))
 
 (gevents/listen
  js/window
  goog.events.EventType.KEYDOWN
  on-key-down)
 
-(view/render)
+(view/render @state/app-state)

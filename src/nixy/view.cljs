@@ -1,6 +1,5 @@
 (ns nixy.view
   (:require
-   [nixy.state :as state]
    [goog.dom :as gdom]))
 
 ; TODO: resize based on width and height
@@ -20,10 +19,9 @@
   (aset ctx "font" "10px courier")
   (.fillText ctx (get-in current-state [:terminal :line]) 10 90))
 
-(defn render []
+(defn render [current-state]
   (let [canvas (gdom/getElement "app")
-        ctx (.getContext canvas "2d")
-        current-state @state/app-state]
+        ctx (.getContext canvas "2d")]
     (aset canvas "width" (get-in current-state [:view :width]))
     (aset canvas "height" (get-in current-state [:view :height]))
     (draw-nixy ctx current-state)
