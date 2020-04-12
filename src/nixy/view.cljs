@@ -1,11 +1,15 @@
 (ns nixy.view
   (:require
+   [nixy.view.shape :as shape]
    [goog.dom :as gdom]))
 
 ; TODO: resize based on width and height
 (defn draw-nixy [ctx current-state]
   (aset ctx "lineWidth" 5)
-  (.strokeRect ctx 3 3 50 50))
+  (aset ctx "fillStyle" "black")
+  (shape/roundRect ctx 3 3 50 50 15)
+  (aset ctx "fillStyle" "white")
+  (shape/roundRect ctx 8 8 40 40 10))
 
 (defn draw-speech-bubble [ctx current-state]
   (aset ctx "lineWidth" 4)
