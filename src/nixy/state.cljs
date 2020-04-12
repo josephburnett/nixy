@@ -15,7 +15,7 @@
    ;; TODO: update this on the 'resize' event.
    :view
    {:width 500
-    :height 500}
+    :height 600}
    
    :character
    {:appearance

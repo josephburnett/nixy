@@ -8,7 +8,7 @@
 (def height 340)
 
 (defn- body [ctx state]
-  (aset ctx "lineWidth" (/ width 30))
+  (aset ctx "lineWidth" (* width 0.03))
   (aset ctx "fillStyle" "white")
   (shape/roundRect ctx
                    center-x
