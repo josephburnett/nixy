@@ -1,15 +1,12 @@
 (ns nixy.view
   (:require
    [nixy.view.shape :as shape]
+   [nixy.view.character :as character]
    [goog.dom :as gdom]))
 
 ; TODO: resize based on width and height
 (defn draw-nixy [ctx current-state]
-  (aset ctx "lineWidth" 5)
-  (aset ctx "fillStyle" "black")
-  (shape/roundRect ctx 3 3 50 50 15)
-  (aset ctx "fillStyle" "white")
-  (shape/roundRect ctx 8 8 40 40 10))
+  (character/nixy ctx current-state))
 
 (defn draw-speech-bubble [ctx current-state]
   (aset ctx "lineWidth" 4)
@@ -28,7 +25,7 @@
         ctx (.getContext canvas "2d")]
     (aset canvas "width" (get-in current-state [:view :width]))
     (aset canvas "height" (get-in current-state [:view :height]))
-    (draw-nixy ctx current-state)
     (draw-speech-bubble ctx current-state)
     (draw-keyboard ctx current-state)
-    (draw-output ctx current-state)))
+    (draw-output ctx current-state)
+    (draw-nixy ctx current-state)))
