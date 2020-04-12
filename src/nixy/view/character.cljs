@@ -2,20 +2,39 @@
   (:require
    [nixy.view.shape :as shape]))
 
-(def center-x 60)
-(def center-y 100)
+(def center-x 120)
+(def center-y 200)
+(def width 200)
+(def height 340)
 
 (defn- body [ctx state]
-  (aset ctx "lineWidth" 8)
+  (aset ctx "lineWidth" (/ width 30))
   (aset ctx "fillStyle" "white")
-  (shape/roundRect ctx center-x center-y 100 170 20)
-  (shape/roundRect ctx center-x (- center-y 23) 80 100 10))
-
+  (shape/roundRect ctx
+                   center-x
+                   center-y
+                   width
+                   height
+                   (* width 0.2))
+  (shape/roundRect ctx
+                   center-x
+                   (- center-y (* height 0.09))
+                   (* width 0.8)
+                   (* height 0.7)
+                   (* width 0.1)))
 
 (defn- eyes [ctx state]
   (aset ctx "fillStyle" "blue")
-  (shape/ellipse ctx (- center-x 20) (- center-y 30) 4 15)
-  (shape/ellipse ctx (+ center-x 20) (- center-y 30) 4 15))
+  (shape/ellipse ctx
+                 (- center-x (* width 0.12))
+                 (- center-y (* height 0.18))
+                 (* width 0.03)
+                 (* height 0.07))
+  (shape/ellipse ctx
+                 (+ center-x (* width 0.12))
+                 (- center-y (* height 0.18))
+                 (* width 0.03)
+                 (* height 0.07)))
 
 (defn nixy [ctx state]
   (body ctx state)
