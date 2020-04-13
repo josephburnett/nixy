@@ -2,7 +2,7 @@
   (:require
    [nixy.view.shape :as shape]
    [nixy.view.character :as character]
-   [nixy.view.keyboard :as keyboard]
+   [nixy.view.laptop :as laptop]
    [nixy.view.output :as output]
    [goog.dom :as gdom]))
 
@@ -16,6 +16,5 @@
     (aset canvas "width" (get-in current-state [:view :width]))
     (aset canvas "height" (get-in current-state [:view :height]))
     (draw-speech-bubble ctx current-state)
-    (keyboard/draw ctx current-state)
-    (output/draw ctx current-state)
+    (laptop/draw ctx current-state)
     (character/nixy ctx current-state)))

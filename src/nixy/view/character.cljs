@@ -2,10 +2,10 @@
   (:require
    [nixy.view.shape :as shape]))
 
-(def center-x 120)
-(def center-y 200)
-(def width 200)
-(def height 340)
+(def center-x 60)
+(def center-y 100)
+(def width 100)
+(def height 170)
 
 (defn- body [ctx state]
   (aset ctx "lineWidth" (* width 0.03))
