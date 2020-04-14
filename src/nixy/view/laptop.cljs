@@ -9,19 +9,24 @@
 (def height 400)
 
 (defn- screen [ctx state]
-  (aset ctx "fillStyle" "grey")
-  (shape/roundRect ctx
-                   center-x
-                   (- center-y (* height 0.25))
-                   (* width 0.95)
-                   (* height 0.40)
-                   (* width 0.02))
-  (aset ctx "font" "30px courier")
-  (aset ctx "fillStyle" "white")
-  (.fillText ctx
-             (get-in state [:terminal :line])
-             (- center-x (* width 0.4))
-             (- center-y (* height 0.35))))
+  (let [lines (cons (str "> " (get-in state [:terminal :line]))
+                    (get-in state [:terminal :output]))]
+    (aset ctx "fillStyle" "grey")
+    (shape/roundRect ctx
+                     center-x
+                     (- center-y (* height 0.25))
+                     (* width 0.95)
+                     (* height 0.40)
+                     (* width 0.02))
+    (aset ctx "font" "30px courier")
+    (aset ctx "fillStyle" "white")
+    (doall (map #(.fillText ctx
+                            %1
+                            (- center-x (* width 0.4))
+                            (+ (- center-y (* height 0.35))
+                               (* height 0.1 %2)))
+                lines
+                (range)))))
 
 (defn- top [ctx state]
   (aset ctx "lineWidth" (* width 0.01))
@@ -76,15 +81,9 @@
               keys
               (range))))
 
-(defn- center-line [ctx]
-  (.moveTo ctx (- center-x width) center-y)
-  (.lineTo ctx (+ center-x width) center-y)
-  (.stroke ctx))
-
 (defn draw [ctx state]
   (let [guide (guide/state->guide state)]
     (top ctx state)
-    ;(center-line ctx)
     (bottom ctx state)
     (doall (map #(row ctx state guide %1 %2)
                 ["qwertyuiop"
