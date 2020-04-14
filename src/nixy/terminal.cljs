@@ -18,14 +18,11 @@
       ;; Run the command with current state and arguments
       (let [args (subs line (count name))
             command (get-in current-state [:filesystem "bin" name])]
-        (print "running command " name)
         (as-> current-state s
-          ((:exec command) s args)
-          (assoc-in s [:terminal :line] "")))
+          ((:exec command) s args)            ; run command
+          (assoc-in s [:terminal :line] ""))) ; reset line
       ;; Command not found
-      (update-in
-       current-state [:errors]
-       #(cons (str "command not found: " line) %)))))
+      (print (str "command not found: " line)))))
 
 (defn press-key [current-state key]
   (let [current-guide (guide/state->guide current-state)]
@@ -38,7 +35,7 @@
       (= "Backspace" key)
       (update-in
        current-state [:terminal :line]
-       #(if (= "" %) "" (str/join (drop-last %))))
+       #(if (empty? %) "" (str/join (drop-last %))))
       ;; Add characters
       (contains? current-guide key)
       (append-state-terminal-line current-state key)
