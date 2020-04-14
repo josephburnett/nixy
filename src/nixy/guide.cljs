@@ -28,5 +28,5 @@
       ;; guide from list of possible commands
       (let [pred (fn [l] (->> command-names
                               (filter #(str/starts-with? % l))
-                              ((complement empty?))))]
+                              not-empty))]
         (pred-args->guide :command pred line)))))
