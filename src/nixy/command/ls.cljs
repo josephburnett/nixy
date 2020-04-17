@@ -1,12 +1,11 @@
-(ns nixy.command.ls)
+(ns nixy.command.ls
+  (:require
+   [nixy.command.dispatch :as dispatch]))
 
-(defn exec [current-state]
+(defmethod dispatch/exec :ls [_ state _]
   (update-in
-   current-state [:terminal :output]
-   #(let [names (as-> current-state s
+   state [:terminal :output]
+   #(let [names (as-> state s
                   (get-in s (concat [:filesystem] (:cwd s)))
                   (keys s))]
       (concat % names))))
-
-(defn args-pred [args]
-  (= "\n" args))

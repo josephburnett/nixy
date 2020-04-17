@@ -1,5 +1,6 @@
 (ns nixy.terminal
   (:require
+   [nixy.command.dispatch :as dispatch]
    [nixy.guide :as guide]
    [clojure.string :as str]))
 
@@ -17,9 +18,9 @@
                     (first s))]
       ;; Run the command with current state and arguments
       (let [args (subs line (count name))
-            command (get-in current-state [:filesystem "bin" name])]
+            file (get-in current-state [:filesystem "bin" name])]
         (as-> current-state s
-          ((:exec command) s args)            ; run command
+          (dispatch/exec file s args)         ; run command
           (assoc-in s [:terminal :line] ""))) ; reset line
       ;; Command not found
       (print (str "command not found: " line)))))

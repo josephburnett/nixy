@@ -1,5 +1,6 @@
 (ns ^:figwheel-hooks nixy.guide
   (:require
+   [nixy.command.dispatch :as dispatch]
    [clojure.string :as str]))
 
 (def valid-keys
@@ -22,9 +23,10 @@
                        (filter #(str/starts-with? line %))
                        first)]
       ;; guide from command arguments predicate
-      (let [command (get-in state [:filesystem "bin" name])
-            args (subs line (count name))]
-        (pred-args->guide :args (:args-pred command) args))
+      (let [file (get-in state [:filesystem "bin" name])
+            args (subs line (count name))
+            pred #(dispatch/args-pred file %)]
+        (pred-args->guide :args pred args))
       ;; guide from list of possible commands
       (let [pred (fn [l] (->> command-names
                               (filter #(str/starts-with? % l))

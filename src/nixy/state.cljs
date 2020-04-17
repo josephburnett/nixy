@@ -1,15 +1,20 @@
 (ns nixy.state
   (:require
-   [nixy.command.ls :as ls]))
+   [nixy.command.generic]
+   [nixy.command.ls]
+   [nixy.command.clear]))
 
 (def ^:private initial-state
   {:filesystem
    {"bin"
     {"ls"
      {:mod #{:x}
-      :exec ls/exec
-      :args-pred ls/args-pred}}}
-
+      :exec :ls
+      :args-pred :enter-only}
+     "clear"
+     {:mod #{:x}
+      :exec :clear
+      :args-pred :enter-only}}}
    :cwd []
 
    ;; TODO: update this on the 'resize' event.
