@@ -1,20 +1,9 @@
 (ns nixy.state
   (:require
-   [nixy.command.generic]
-   [nixy.command.ls]
-   [nixy.command.clear]))
+   [nixy.filesystem.nixy :as nixy]))
 
 (def ^:private initial-state
-  {:filesystem
-   {"bin"
-    {"ls"
-     {:mod #{:x}
-      :exec :ls
-      :args-pred :enter-only}
-     "clear"
-     {:mod #{:x}
-      :exec :clear
-      :args-pred :enter-only}}}
+  {:filesystem nixy/fs
    :cwd []
 
    :character
