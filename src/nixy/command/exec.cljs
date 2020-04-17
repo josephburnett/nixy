@@ -10,15 +10,16 @@
    #(str/join (concat % key))))
 
 (defn- run-command [current-state]
-  (let [line (get-in current-state [:terminal :line])]
+  (let [line (get-in current-state [:terminal :line])
+        fs (get-in current-state [:terminal :fs])]
     (if-let [name (as-> current-state s
-                    (get-in s [:filesystem "bin"])
+                    (get-in s [fs :filesystem "bin"])
                     (keys s)
                     (filter #(str/starts-with? line %) s) 
                     (first s))]
       ;; Run the command with current state and arguments
       (let [args (subs line (count name))
-            file (get-in current-state [:filesystem "bin" name])]
+            file (get-in current-state [fs :filesystem "bin" name])]
         (as-> current-state s
           (dispatch/exec file s args)         ; run command
           (assoc-in s [:terminal :line] ""))) ; reset line
