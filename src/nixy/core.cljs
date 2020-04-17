@@ -2,8 +2,8 @@
   (:require
    [nixy.guide :as guide]
    [nixy.state :as state]
-   [nixy.terminal :as terminal]
    [nixy.view :as view]
+   [nixy.command.exec :as exec]
    [goog.events :as gevents]))
 
 ;; specify reload hook with ^;after-load metadata
@@ -13,7 +13,7 @@
 (defn on-key-down [e]
   (reset!
    state/app-state
-   (terminal/press-key @state/app-state (.-key e)))
+   (exec/press-key @state/app-state (.-key e)))
   (view/render @state/app-state))
 
 (gevents/listen

@@ -1,4 +1,4 @@
-(ns nixy.terminal
+(ns nixy.command.exec
   (:require
    [nixy.command.dispatch :as dispatch]
    [nixy.guide :as guide]
