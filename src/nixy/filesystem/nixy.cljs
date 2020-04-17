@@ -1,8 +1,4 @@
-(ns nixy.filesystem.nixy
-  (:require
-   [nixy.command.generic]
-   [nixy.command.ls]
-   [nixy.command.clear]))
+(ns nixy.filesystem.nixy)
 
 (def fs
   {"bin"

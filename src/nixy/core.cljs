@@ -4,6 +4,7 @@
    [nixy.state :as state]
    [nixy.view :as view]
    [nixy.command.exec :as exec]
+   [nixy.command] ; register all defined commands
    [goog.events :as gevents]))
 
 ;; specify reload hook with ^;after-load metadata
