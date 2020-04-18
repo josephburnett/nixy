@@ -1,6 +1,6 @@
 (ns nixy.command.generic
   (:require
-   [nixy.command.dispatch :as dispatch]))
+   [nixy.command :as command]))
 
-(defmethod dispatch/args-pred :enter-only [_ _ args]
+(defmethod command/args-pred :enter-only [_ _ args]
   (= "\n" args))

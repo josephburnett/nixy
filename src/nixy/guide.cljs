@@ -1,6 +1,6 @@
 (ns ^:figwheel-hooks nixy.guide
   (:require
-   [nixy.command.dispatch :as dispatch]
+   [nixy.command :as command]
    [clojure.string :as str]))
 
 (def valid-keys
@@ -27,7 +27,7 @@
       (let [fs (get-in state [:terminal :fs])
             file (get-in state [fs :filesystem "bin" filename])
             args (subs line (count filename))
-            pred #(dispatch/args-pred file state %)]
+            pred #(command/args-pred file state %)]
         (pred-args->guide :args pred args))
       ;; guide from list of executable files
       (let [pred (fn [l] (->> command-names

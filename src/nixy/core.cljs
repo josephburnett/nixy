@@ -3,8 +3,8 @@
    [nixy.guide :as guide]
    [nixy.state :as state]
    [nixy.view :as view]
-   [nixy.command.exec :as exec]
-   [nixy.command] ; register all defined commands
+   [nixy.event :as event]
+   [nixy.command.all]
    [goog.events :as gevents]))
 
 ;; specify reload hook with ^;after-load metadata
@@ -14,7 +14,7 @@
 (defn on-key-down [e]
   (reset!
    state/app-state
-   (exec/press-key @state/app-state (.-key e)))
+   (event/press-key @state/app-state (.-key e)))
   (view/render @state/app-state))
 
 (gevents/listen

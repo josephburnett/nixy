@@ -1,8 +1,8 @@
 (ns nixy.command.clear
   (:require
-   [nixy.command.dispatch :as dispatch]))
+   [nixy.command :as command]))
 
-(defmethod dispatch/exec :clear [_ state _]
+(defmethod command/exec :clear [_ state _]
   (as-> state s
     (assoc-in s [:terminal :output] [])
     (assoc-in s [:terminal :line] [])))

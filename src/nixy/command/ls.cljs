@@ -1,8 +1,8 @@
 (ns nixy.command.ls
   (:require
-   [nixy.command.dispatch :as dispatch]))
+   [nixy.command :as command]))
 
-(defmethod dispatch/exec :ls [_ state _]
+(defmethod command/exec :ls [_ state _]
   (let [fs (get-in state [:terminal :fs])]
     (update-in
      state [:terminal :output]

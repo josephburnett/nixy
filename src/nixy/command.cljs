@@ -1,6 +1,8 @@
-(ns nixy.command
-  (:require
-   [nixy.command.generic]
-   [nixy.command.ls]
-   [nixy.command.clear]
-   [nixy.command.cd]))
+(ns nixy.command)
+
+(defmulti exec
+  (fn [file state args] (:exec file)))
+
+(defmulti args-pred
+  (fn [file args] (:args-pred file)))
+

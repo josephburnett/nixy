@@ -1,6 +1,6 @@
-(ns nixy.command.exec
+(ns nixy.event
   (:require
-   [nixy.command.dispatch :as dispatch]
+   [nixy.command :as command]
    [nixy.guide :as guide]
    [clojure.string :as str]))
 
@@ -21,7 +21,7 @@
       (let [args (subs line (count name))
             file (get-in current-state [fs :filesystem "bin" name])]
         (as-> current-state s
-          (dispatch/exec file s args)         ; run command
+          (command/exec file s args)         ; run command
           (assoc-in s [:terminal :line] ""))) ; reset line
       ;; Command not found
       (print (str "command not found: " line)))))
