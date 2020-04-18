@@ -27,7 +27,7 @@
       (let [fs (get-in state [:terminal :fs])
             file (get-in state [fs :filesystem "bin" filename])
             args (subs line (count filename))
-            pred #(dispatch/args-pred file %)]
+            pred #(dispatch/args-pred file state %)]
         (pred-args->guide :args pred args))
       ;; guide from list of executable files
       (let [pred (fn [l] (->> command-names

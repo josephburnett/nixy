@@ -9,4 +9,8 @@
     "clear"
     {:mod #{:x}
      :exec :clear
-     :args-pred :enter-only}}})
+     :args-pred :enter-only}
+    "cd"
+    {:mod #{:x}
+     :exec :cd
+     :args-pred :cd}}})
