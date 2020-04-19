@@ -3,7 +3,7 @@
    [nixy.filesystem.nixy :as nixy]
    [nixy.filesystem.laptop :as laptop]))
 
-(def ^:private initial-state
+(def initial-state
   {:nixy {:filesystem nixy/fs
           :cwd []
           :appearance {:blinking :true
