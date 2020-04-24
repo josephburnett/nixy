@@ -2,7 +2,9 @@
   (:require
    [clojure.string :as str]
    [cljs.test :refer-macros [deftest is testing]]
-   [nixy.guide :as ng]))
+   [nixy.state :as state]
+   [nixy.guide :as ng]
+   [nixy.command :as command]))
 
 (deftest pred-args->guide-test
   (let [pred #(or (str/starts-with? " etc" %)
@@ -17,8 +19,14 @@
     (is (= (given " va") {"r" #{:t}}))
     (is (= (given " var") {}))))
 
+(defmethod command/args-pred :guide-test
+  [_ _ args]
+  (str/starts-with? " a\n" args))
+
 (deftest state->guide-test
-  (let [state {:filesystem {"bin" {"cd" {:args-pred #(str/starts-with? " a\n" %)}}}}
+  (let [state (assoc-in state/initial-state
+                        [:nixy :filesystem "bin"]
+                        {"cd" {:args-pred :guide-test}})
         given #(ng/state->guide (assoc-in state [:terminal :line] %))]
     (is (= (given "") {"c" #{:command}}))
     (is (= (given "c") {"d" #{:command}}))
