@@ -10,4 +10,5 @@
                      (assoc-in state/initial-state [:nixy :cwd] x)
                      (command/exec {:exec :ls} x "")
                      (get-in x [:terminal :output]))]
-    (is (= ["bin"] (ls-in-dir [])))))
+    (is (= ["bin"] (ls-in-dir [])))
+    (is (some #(= "ls" %) (ls-in-dir ["bin"]) "ls"))))
