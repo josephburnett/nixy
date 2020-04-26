@@ -1,5 +1,6 @@
 (ns nixy.view.laptop
   (:require
+   [nixy.state.terminal :as terminal]
    [nixy.guide :as guide]
    [nixy.view.shape :as shape]))
 
@@ -9,7 +10,8 @@
 (def height 400)
 
 (defn- screen [ctx state]
-  (let [lines (cons (str "> " (get-in state [:terminal :line]))
+  (let [prompt (terminal/prompt state)
+        lines (cons (str prompt (get-in state [:terminal :line]))
                     (get-in state [:terminal :output]))]
     (aset ctx "fillStyle" "grey")
     (shape/roundRect ctx
@@ -18,13 +20,13 @@
                      (* width 0.95)
                      (* height 0.40)
                      (* width 0.02))
-    (aset ctx "font" "30px courier")
+    (aset ctx "font" "15px courier")
     (aset ctx "fillStyle" "white")
     (doall (map #(.fillText ctx
                             %1
-                            (- center-x (* width 0.4))
+                            (- center-x (* width 0.4))      ; left margin
                             (+ (- center-y (* height 0.35))
-                               (* height 0.1 %2)))
+                               (* height 0.05 %2)))         ; line spacing
                 lines
                 (range)))))
 
