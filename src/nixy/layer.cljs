@@ -4,15 +4,15 @@
   (fn [_] true))
 
 (defn file-exists [& path]
-  #(if-let [file (get-in (:filesystem %) path)]
+  #(if-let [file (get-in (:root (:filesystem %)) path)]
      (contains? file :mod)))
 
 (defn dir-exists [& path]
-  #(if-let [file (get-in (:filesystem %) path)]
+  #(if-let [file (get-in (:root (:filesystem %)) path)]
      (not (contains? file :mod))))
 
 (defn cwd [& path]
-  #(= (:cwd %) path))
+  #(= (:cwd (:filesystem %)) path))
 
 (defn select-conditions [state layer]
   (print layer)

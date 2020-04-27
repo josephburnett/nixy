@@ -13,13 +13,13 @@
   (let [line (get-in current-state [:terminal :line])
         fs (get-in current-state [:terminal :fs])]
     (if-let [name (as-> current-state s
-                    (get-in s [fs :filesystem "bin"])
+                    (get-in s [fs :filesystem :root "bin"])
                     (keys s)
                     (filter #(str/starts-with? line %) s) 
                     (first s))]
       ;; Run the command with current state and arguments
       (let [args (subs line (count name))
-            file (get-in current-state [fs :filesystem "bin" name])]
+            file (get-in current-state [fs :filesystem :root "bin" name])]
         (as-> current-state s
           (command/exec file s args)         ; run command
           (assoc-in s [:terminal :line] ""))) ; reset line

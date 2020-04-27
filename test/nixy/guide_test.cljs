@@ -25,7 +25,7 @@
 
 (deftest state->guide-test
   (let [state (assoc-in state/initial-state
-                        [:nixy :filesystem "bin"]
+                        [:nixy :filesystem :root "bin"]
                         {"cd" {:args-pred :guide-test}})
         given #(ng/state->guide (assoc-in state [:terminal :line] %))]
     (is (= (given "") {"c" #{:command}}))

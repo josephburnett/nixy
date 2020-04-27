@@ -4,10 +4,11 @@
    [nixy.layer :as nl]))
 
 (def test-state
-  {:cwd ["etc"]
-   :filesystem
-   {"etc"
-    {"badfile" {:mod #{:r}}}}})
+  {:filesystem
+   {:cwd ["etc"]
+    :root
+    {"etc"
+     {"badfile" {:mod #{:r}}}}}})
 
 (deftest file-exists-test
   (let [given #((apply nl/file-exists %) test-state)]
@@ -47,6 +48,6 @@
                            (nl/select-conditions state)))
         with-state (fn [path value]
                      (assoc-in test-state path value))]
-    (is (= 1 (count (given-layer "middle" (with-state [:cwd] ["etc"])))))
-    (is (= 1 (count (given-layer "middle" (with-state [:cwd] ["var"])))))
-    (is (= 0 (count (given-layer "middle" (with-state [:cwd] ["usr"])))))))
+    (is (= 1 (count (given-layer "middle" (with-state [:filesystem :cwd] ["etc"])))))
+    (is (= 1 (count (given-layer "middle" (with-state [:filesystem :cwd] ["var"])))))
+    (is (= 0 (count (given-layer "middle" (with-state [:filesystem :cwd] ["usr"])))))))

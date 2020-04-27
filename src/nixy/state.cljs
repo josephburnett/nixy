@@ -4,13 +4,13 @@
    [nixy.filesystem.laptop :as laptop]))
 
 (def initial-state
-  {:nixy {:filesystem nixy/fs
-          :cwd []
+  {:nixy {:filesystem {:root nixy/fs
+                       :cwd []}
           :appearance {:blinking :true
                        :color "#fff"}
           :speech-bubble-text []}
-   :laptop {:filesystem laptop/fs
-            :cwd []}
+   :laptop {:filesystem {:root laptop/fs
+                         :cwd []}}
    :terminal {:fs :nixy
               :line ""
               :output []}})

@@ -19,13 +19,13 @@
 (defn state->guide [state]
   (let [line (get-in state [:terminal :line])
         fs (get-in state [:terminal :fs])
-        command-names (keys (get-in state [fs :filesystem "bin"]))]
+        command-names (keys (get-in state [fs :filesystem :root "bin"]))]
     (if-let [filename (->> command-names
                            (filter #(str/starts-with? line %))
                            first)]
       ;; guide from file args predicate
       (let [fs (get-in state [:terminal :fs])
-            file (get-in state [fs :filesystem "bin" filename])
+            file (get-in state [fs :filesystem :root "bin" filename])
             args (subs line (count filename))
             pred #(command/args-pred file state %)]
         (pred-args->guide :args pred args))

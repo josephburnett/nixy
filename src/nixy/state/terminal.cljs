@@ -4,5 +4,5 @@
 
 (defn prompt [state]
   (let [fs (get-in state [:terminal :fs])
-        cwd (str/join "/" (get-in state [fs :cwd]))]
+        cwd (str/join "/" (get-in state [fs :filesystem :cwd]))]
     (str/join [(name fs) ":" cwd "> "])))
