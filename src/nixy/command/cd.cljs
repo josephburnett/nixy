@@ -1,5 +1,6 @@
 (ns nixy.command.cd
   (:require
+   [nixy.state.terminal :as terminal]
    [nixy.command :as command]
    [clojure.string :as str]))
 
@@ -7,9 +8,11 @@
   (let [fs (get-in state [:terminal :fs])
         cwd (get-in state [fs :filesystem :cwd])
         dir (str/join (drop 1 args))]
-    (if (= ".." dir)
-      (assoc-in state [fs :filesystem :cwd] (drop-last cwd))
-      (assoc-in state [fs :filesystem :cwd] (concat cwd [dir])))))
+    (as-> state s
+      (terminal/append s [(terminal/prompt s)])
+      (if (= ".." dir)
+        (assoc-in s [fs :filesystem :cwd] (drop-last cwd))
+        (assoc-in s [fs :filesystem :cwd] (concat cwd [dir]))))))
 
 (defmethod command/args-pred :cd [_ state args]
   (let [fs (get-in state [:terminal :fs])

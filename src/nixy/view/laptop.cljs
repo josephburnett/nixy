@@ -12,7 +12,7 @@
 (defn- screen [ctx state]
   (let [prompt (terminal/prompt state)
         lines (cons (str prompt (get-in state [:terminal :line]))
-                    (get-in state [:terminal :output]))]
+                    (reverse (get-in state [:terminal :output])))]
     (aset ctx "fillStyle" "grey")
     (shape/roundRect ctx
                      center-x
