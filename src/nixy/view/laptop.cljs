@@ -90,5 +90,5 @@
     (doall (map #(row ctx state guide %1 %2)
                 ["qwertyuiop"
                  "asdfghjkl\n"
-                 "zxcvbnm"]
+                 "zxcv bnm."]
                 (range)))))

@@ -6,7 +6,7 @@
 (def valid-keys
   ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l"
    "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x"
-   "y" "z" " " "\n"])
+   "y" "z" " " "." "\n"])
 
 (defn pred-args->guide [tag pred args]
   (reduce

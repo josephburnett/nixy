@@ -29,4 +29,5 @@
     (is (= true (in-dir ["bin"] " .")))
     (is (= true (in-dir ["bin"] " ..")))
     (is (= true (in-dir ["bin"] " ..\n")))
-    (is (= false (in-dir ["bin"] " wrong")))))
+    (is (= false (in-dir ["bin"] " wrong")))
+    (is (= false (in-dir ["bin"] " c")) "cannot cd into a file")))
