@@ -27,12 +27,14 @@
         (is (= ["file1"
                 "file2"
                 "emptydir"
-                "dir"]
+                "dir"
+                "test-fs:> ls"]
                (in-dir []))))
       (testing "in empty directory"
-        (is (= []
+        (is (= ["test-fs:emptydir> ls"]
                (in-dir ["emptydir"]))))
       (testing "in sub directory"
         (is (= ["file3"
-                "file4"]
+                "file4"
+                "test-fs:dir> ls"]
                (in-dir ["dir"])))))))
