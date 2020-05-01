@@ -11,5 +11,4 @@
                 (keys s))]
     (terminal/append
      state
-     (concat names
-             [(str (terminal/prompt state) "ls")]))))
+     (concat [(terminal/prompt state)] names))))

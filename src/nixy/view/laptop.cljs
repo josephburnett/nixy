@@ -11,7 +11,7 @@
 
 (defn- screen [ctx state]
   (let [prompt (terminal/prompt state)
-        lines (cons (str prompt (get-in state [:terminal :line]))
+        lines (cons prompt
                     (reverse (get-in state [:terminal :output])))]
     (aset ctx "fillStyle" "grey")
     (shape/roundRect ctx
@@ -25,7 +25,7 @@
     (doall (map #(.fillText ctx
                             %1
                             (- center-x (* width 0.4))      ; left margin
-                            (+ (- center-y (* height 0.35))
+                            (- (- center-y (* height 0.1))
                                (* height 0.05 %2)))         ; line spacing
                 lines
                 (range)))))
