@@ -3,4 +3,5 @@
    [nixy.command.generic]
    [nixy.command.ls]
    [nixy.command.clear]
-   [nixy.command.cd]))
+   [nixy.command.cd]
+   [nixy.command.ssh]))

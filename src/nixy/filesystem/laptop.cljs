@@ -2,11 +2,7 @@
 
 (def fs
   {"bin"
-   {"ls"
+   {"ssh"
     {:mod #{:x}
-     :exec :ls
-     :args-pred :enter-only}
-    "clear"
-    {:mod #{:x}
-     :exec :clear
-     :args-pred :enter-only}}})
+     :exec :ssh
+     :args-pred :ssh-to-nixy}}})

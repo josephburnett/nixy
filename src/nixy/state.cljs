@@ -11,7 +11,7 @@
           :speech-bubble-text []}
    :laptop {:filesystem {:root laptop/fs
                          :cwd []}}
-   :terminal {:fs :nixy
+   :terminal {:fs :laptop
               :line ""
               :output []}})
 
