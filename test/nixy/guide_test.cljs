@@ -1,10 +1,15 @@
 (ns nixy.guide-test
   (:require
    [clojure.string :as str]
-   [cljs.test :refer-macros [deftest is testing]]
+   [cljs.test :refer-macros [deftest is testing use-fixtures]]
+   [nixy.fixtures :refer [merge-state]]
    [nixy.state :as state]
    [nixy.guide :as ng]
    [nixy.command :as command]))
+
+(use-fixtures :each
+  (merge-state
+   {:terminal {:fs :nixy}}))
 
 (deftest pred-args->guide-test
   (let [pred #(or (str/starts-with? " etc" %)
@@ -24,7 +29,7 @@
   (str/starts-with? " a\n" args))
 
 (deftest state->guide-test
-  (let [state (assoc-in state/initial-state
+  (let [state (assoc-in @state/app-state
                         [:nixy :filesystem :root "bin"]
                         {"cd" {:args-pred :guide-test}})
         given #(ng/state->guide (assoc-in state [:terminal :line] %))]
