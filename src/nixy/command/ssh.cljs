@@ -11,5 +11,4 @@
       (assoc-in s [:terminal :fs] fs))))
 
 (defmethod command/args-pred :ssh-to-nixy [_ state args]
-  (let [fs (get-in state [:terminal :fs])]
-    (str/starts-with? " nixy\n" args)))
+  (str/starts-with? " nixy\n" args))
