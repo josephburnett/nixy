@@ -13,4 +13,10 @@
     "cd"
     {:mod #{:x}
      :exec :cd
-     :args-pred :cd}}})
+     :args-pred :cd}
+    "touch"
+    {:mod #{:x}
+     :exec :touch
+     :args-pred :touch}}
+   "usr"
+   {}})

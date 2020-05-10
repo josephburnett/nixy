@@ -4,7 +4,7 @@
    [nixy.fixtures :refer [merge-state]]
    [nixy.state :as state]
    [nixy.command :as command]
-   [mixy.command.ssh :as ssh]))
+   [nixy.command.ssh :as ssh]))
 
 (use-fixtures :each
   (merge-state

@@ -4,4 +4,5 @@
    [nixy.command.ls]
    [nixy.command.clear]
    [nixy.command.cd]
-   [nixy.command.ssh]))
+   [nixy.command.ssh]
+   [nixy.command.touch]))
