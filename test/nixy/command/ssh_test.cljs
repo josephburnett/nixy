@@ -16,7 +16,7 @@
   (let [check (fn [source dest]
                 (as-> @state/app-state s
                   (assoc-in s [:terminal :fs] source)
-                  (command/exec {:exec :ssh} s (str " " dest "\n"))
+                  (command/exec {:exec :ssh} s (str " " dest))
                   (get-in s [:terminal :fs])))]
     (testing "ssh"
       (is (= :two (check "one" "two")) "from one to two")
