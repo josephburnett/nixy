@@ -8,7 +8,8 @@
 
 (use-fixtures :each
   (merge-state
-   {:nixy {:filesystem {:root {"dir" {}}}}
+   {:nixy {:filesystem {:root {"dir" {}
+                               "usr" {"existingfile" {}}}}}
     :terminal {:fs :nixy}}))
 
 (def empty-file {:mod #{:r :w}
@@ -18,9 +19,25 @@
   (let [check (fn [path filename]
                 (as-> @state/app-state s
                   (assoc-in s [:nixy :filesystem :cwd] path)
-                  (command/exec {:exec :touch} s (cons " "filename))
+                  (command/exec {:exec :touch} s (cons " " filename))
                   (get-in s (concat [:nixy :filesystem :root] path [filename]))))]
                   
     (testing "touch"
       (is (= empty-file (check [] "file")))
       (is (= empty-file (check ["dir"] "file"))))))
+
+(deftest touch-args-pred-test
+  (let [check (fn [path filename]
+                (as-> @state/app-state s
+                  (assoc-in s [:nixy :filesystem :cwd] path)
+                  (command/args-pred {:args-pred :touch} s filename)))]
+    (testing "touch"
+      (testing "in /"
+        (is (= false (check [] " ")) "cannot create a file"))
+      (testing "in /bin"
+        (is (= false (check ["bin"] " ")) "cannot create a file"))
+      (testing "in /usr"
+        (is (= true (check ["usr"] " ")) "can provide parameters")
+        (is (= true (check ["usr"] " file")) "can provide a filename")
+        (is (= true (check ["usr"] " file\n")) "can create a file")
+        (is (= false (check ["usr"] " existingfile\n")) "cannot overwrite another file")))))

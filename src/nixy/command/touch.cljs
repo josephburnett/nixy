@@ -19,7 +19,7 @@
         files (keys (get-in state (concat [fs :filesystem :root] cwd)))
         filename (str/join (drop 1 args))
         valid (or (= " " args)
-                  (re-matches #" [a-z]{1,8}\n{0,1}" args))
+                  (not (nil? (re-matches #" [a-z]{1,8}\n{0,1}" args))))
         unique (not-any? #(= (str % "\n") filename) files)]
     (and (= "usr" (first cwd))
          valid
