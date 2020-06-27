@@ -14,6 +14,10 @@
     {:mod #{:x}
      :exec :cd
      :args-pred :cd}
+    "rm"
+    {:mod #{:x}
+     :exec :rm
+     :args-pred :rm}
     "touch"
     {:mod #{:x}
      :exec :touch
