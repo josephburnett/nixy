@@ -11,7 +11,7 @@
         files (keys dir)
         filename (str/join (drop 1 args))]
     (assoc-in
-     state
+     (terminal/append state [(terminal/prompt state)])
      (concat [fs :filesystem :root] cwd)
      (dissoc dir filename))))
 

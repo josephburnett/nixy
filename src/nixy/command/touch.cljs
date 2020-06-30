@@ -8,10 +8,11 @@
   (let [fs (get-in state [:terminal :fs])
         cwd (get-in state [fs :filesystem :cwd])
         filename (str/join (drop 1 args))]
-    (assoc-in state
-              (concat [fs :filesystem :root] cwd [filename])
-              {:mod #{:r :w}
-               :cat ""})))
+    (assoc-in
+     (terminal/append state [(terminal/prompt state)])
+     (concat [fs :filesystem :root] cwd [filename])
+     {:mod #{:r :w}
+      :cat ""})))
 
 (defmethod command/args-pred :touch [_ state args]
   (let [fs (get-in state [:terminal :fs])
