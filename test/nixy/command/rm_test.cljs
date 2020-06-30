@@ -12,7 +12,8 @@
     {:filesystem
      {:root
       {"usr"
-       {"file" {}}}}}
+       {"file" {}}
+       "bin" {}}}}
     :terminal
     {:fs :test-fs}}))
 
@@ -25,3 +26,20 @@
     (testing "rm a file"
       (is (= {} (check ["usr"] " file"))))))
       
+(deftest rm-args-pred-test
+  (let [check (fn [in-dir rm-args]
+                (as-> @state/app-state s
+                  (assoc-in s [:test-fs :filesystem :cwd] in-dir)
+                  (command/args-pred {:args-pred :rm} s rm-args)))]
+    (testing "rm in usr"
+      (is (= false (check ["usr"] "\n")) "must provide a filename")
+      (is (= true (check ["usr"] " ")))
+      (is (= true (check ["usr"] " f")))
+      (is (= true (check ["usr"] " fi")))
+      (is (= true (check ["usr"] " fil")))
+      (is (= true (check ["usr"] " file")))
+      (is (= true (check ["usr"] " file\n")))
+      (is (= false (check ["usr"] " nofile")) "file must exist"))
+    (testing "rm is bin"
+      (is (= false (check ["bin"] " ")) "bin is off limits"))))
+
