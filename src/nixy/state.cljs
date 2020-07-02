@@ -13,6 +13,7 @@
                          :cwd []}}
    :terminal {:fs :laptop
               :line ""
-              :output []}})
+              :output []}
+   :cookies #{}})
 
 (def app-state (atom initial-state))
