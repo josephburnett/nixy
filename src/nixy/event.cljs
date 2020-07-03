@@ -1,6 +1,7 @@
 (ns nixy.event
   (:require
    [nixy.command :as command]
+   [nixy.cookies :as cookies]
    [nixy.guide :as guide]
    [clojure.string :as str]))
 
@@ -21,8 +22,9 @@
       (let [args (subs line (count name))
             file (get-in current-state [fs :filesystem :root "bin" name])]
         (as-> current-state s
-          (command/exec file s args)         ; run command
-          (assoc-in s [:terminal :line] ""))) ; reset line
+          (command/exec file s args)        ; run command
+          (command/archive-line s)          ; add to history
+          (cookies/grant-new-cookies s)))   ; grant cookies
       ;; Command not found
       (print (str "command not found: " line)))))
 

@@ -14,8 +14,8 @@
       (is (= #{:a :b} (check {:cookies #{:a :b}} #{:b})) "duplicate cookie")
       (is (= #{:a :b :c} (check {:cookies #{:a}} #{:b :c})) "multiple cookies"))))
 
-(deftest new-test
-  (let [check cookies/new]
+(deftest find-new-test
+  (let [check cookies/find-new]
     (is (= #{} (check #{} [])) "no preds")
     (is (= #{} (check #{} [{:key :a :pred (fn [_] false)}])) "false")
     (is (= #{:a} (check #{} [{:key :a :pred (fn [_] true)}])) "true, new")
