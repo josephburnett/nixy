@@ -22,5 +22,11 @@
     {:mod #{:x}
      :exec :touch
      :args-pred :touch}}
-   "usr"
-   {}})
+   "usr" {}
+   "etc"
+   {"config"
+    {:mod #{:rw}
+     :cat "
+eyes.left.enabled=true
+eyes.right.enabled=true
+"}}})
