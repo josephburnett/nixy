@@ -22,6 +22,7 @@
                 (as-> @state/app-state s
                   (assoc-in s [:test-fs :filesystem :cwd] in-dir)
                   (command/exec {:exec :rm} s rm-args)
+                  (:state s)
                   (get-in s (concat [:test-fs :filesystem :root] in-dir))))]
     (testing "rm a file"
       (is (= {} (check ["usr"] " file"))))))

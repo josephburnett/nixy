@@ -4,15 +4,15 @@
    [nixy.command :as command]
    [clojure.string :as str]))
 
-(defmethod command/exec :touch [_ state args]
-  (let [fs (get-in state [:terminal :fs])
+(defmethod command/exec :touch [_ state args _]
+  (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         filename (str/join (drop 1 args))]
-    (assoc-in
-     (terminal/append state [(terminal/prompt state)])
-     (concat [fs :filesystem :root] cwd [filename])
-     {:mod #{:r :w}
-      :cat ""})))
+    {:stdout []
+     :state
+     (assoc-in state (concat [fs :filesystem :root] cwd [filename])
+               {:mod #{:r :w}
+                :cat ""})}))
 
 (defmethod command/args-pred :touch [_ state args]
   (let [fs (get-in state [:terminal :fs])

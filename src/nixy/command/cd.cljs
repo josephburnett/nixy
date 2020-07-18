@@ -5,17 +5,17 @@
    [clojure.string :as str]))
 
 (defmethod command/exec :cd [_ state args]
-  (let [fs (get-in state [:terminal :fs])
+  (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         dir (str/join (drop 1 args))]
-    (as-> state s
-      (terminal/append s [(terminal/prompt s)])
-      (if (= ".." dir)
-        (assoc-in s [fs :filesystem :cwd] (drop-last cwd))
-        (assoc-in s [fs :filesystem :cwd] (concat cwd [dir]))))))
+    {:stdout []
+     :state
+     (if (= ".." dir)
+       (assoc-in state [fs :filesystem :cwd] (drop-last cwd))
+       (assoc-in state [fs :filesystem :cwd] (concat cwd [dir])))}))
 
 (defmethod command/args-pred :cd [_ state args]
-  (let [fs (get-in state [:terminal :fs])
+  (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         current-dir (get-in state (concat [fs :filesystem :root] cwd))]
     (as-> current-dir x

@@ -20,6 +20,7 @@
                 (as-> @state/app-state s
                   (assoc-in s [:nixy :filesystem :cwd] path)
                   (command/exec {:exec :touch} s (cons " " filename))
+                  (:state s)
                   (get-in s (concat [:nixy :filesystem :root] path [filename]))))]
                   
     (testing "touch"

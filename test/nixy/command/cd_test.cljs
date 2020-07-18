@@ -15,6 +15,7 @@
                      (as-> from x
                        (assoc-in @state/app-state [:nixy :filesystem :cwd] x)
                        (command/exec {:exec :cd} x to)
+                       (:state x)
                        (get-in x [:nixy :filesystem :cwd])))]
     (is (= ["bin"] (cd-from-to [] " bin")))
     (is (= [] (cd-from-to ["bin"] " ..")))))

@@ -22,20 +22,18 @@
                   (assoc-in @state/app-state [:test-fs :filesystem :cwd] x)
                   (assoc-in x [:terminal :line] "ls")
                   (command/exec {:exec :ls} x "")
-                  (get-in x [:terminal :output]))]
+                  (:stdout x))]
     (testing "ls"
       (testing "in root of filesystem"
-        (is (= ["test-fs:> ls"
-                "file1"
+        (is (= ["file1"
                 "file2"
                 "emptydir"
                 "dir"]
                (in-dir []))))
       (testing "in empty directory"
-        (is (= ["test-fs:emptydir> ls"]
+        (is (= []
                (in-dir ["emptydir"]))))
       (testing "in sub directory"
-        (is (= ["test-fs:dir> ls"
-               "file3"
+        (is (= ["file3"
                 "file4"]
                (in-dir ["dir"])))))))

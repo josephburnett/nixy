@@ -1,7 +1,7 @@
 (ns nixy.command)
 
 (defmulti exec
-  (fn [file state args] (:exec file)))
+  (fn [file state args stdin] (:exec file)))
 
 (defmulti args-pred
   (fn [file args] (:args-pred file)))
