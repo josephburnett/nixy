@@ -21,7 +21,11 @@
     "touch"
     {:mod #{:x}
      :exec :touch
-     :args-pred :touch}}
+     :args-pred :touch}
+    "grep"
+    {:mod #{:x}
+     :exec :grep
+     :args-pred :grep}}
    "usr" {}
    "etc"
    {"config"

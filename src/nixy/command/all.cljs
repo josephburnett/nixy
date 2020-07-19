@@ -4,6 +4,7 @@
    [nixy.command.clear]
    [nixy.command.config]
    [nixy.command.generic]
+   [nixy.command.grep]
    [nixy.command.ls]
    [nixy.command.rm]
    [nixy.command.ssh]
