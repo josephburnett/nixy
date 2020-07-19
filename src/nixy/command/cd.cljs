@@ -4,7 +4,7 @@
    [nixy.command :as command]
    [clojure.string :as str]))
 
-(defmethod command/exec :cd [_ state args]
+(defmethod command/exec :cd [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         dir (str/join (drop 1 args))]
@@ -14,7 +14,7 @@
        (assoc-in state [fs :filesystem :cwd] (drop-last cwd))
        (assoc-in state [fs :filesystem :cwd] (concat cwd [dir])))}))
 
-(defmethod command/args-pred :cd [_ state args]
+(defmethod command/args-pred :cd [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         current-dir (get-in state (concat [fs :filesystem :root] cwd))]

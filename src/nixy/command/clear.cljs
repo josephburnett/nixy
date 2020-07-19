@@ -2,7 +2,7 @@
   (:require
    [nixy.command :as command]))
 
-(defmethod command/exec :clear [_ state _ _]
+(defmethod command/exec :clear [{:keys [state]}]
   {:stdout []
    :state
    (as-> state s

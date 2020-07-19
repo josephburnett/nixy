@@ -14,7 +14,7 @@
   (let [cd-from-to (fn [from to]
                      (as-> from x
                        (assoc-in @state/app-state [:nixy :filesystem :cwd] x)
-                       (command/exec {:exec :cd} x to)
+                       (command/exec {:exec :cd :state x :args to})
                        (:state x)
                        (get-in x [:nixy :filesystem :cwd])))]
     (is (= ["bin"] (cd-from-to [] " bin")))
@@ -24,7 +24,7 @@
   (let [in-dir (fn [dir args]
                  (as-> dir x
                    (assoc-in @state/app-state [:nixy :filesystem :cwd] x)
-                   (command/args-pred {:args-pred :cd} x args)))]
+                   (command/args-pred {:args-pred :cd :state x :args args})))]
     (is (= true (in-dir [] " ")))
     (is (= true (in-dir [] " b")))
     (is (= true (in-dir [] " bin")))

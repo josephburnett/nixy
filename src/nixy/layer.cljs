@@ -15,7 +15,6 @@
   #(= (:cwd (:filesystem %)) path))
 
 (defn select-conditions [state layer]
-  (print layer)
   (filter
    (fn [condition]
      (every? #(% state) (:preds condition)))

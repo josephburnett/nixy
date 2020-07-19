@@ -15,7 +15,9 @@
                (first s))
         args (subs command (count name))
         file (get-in current-state [fs :filesystem :root "bin" name])]
-    (command/exec file current-state args stdin)))
+    (command/exec (merge file {:state current-state
+                               :args args
+                               :stdin stdin}))))
 
 (defn- exec-all [current-state commands]
   (reduce (fn [{:keys [state stdout]} command]

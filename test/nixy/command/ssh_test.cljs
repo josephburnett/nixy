@@ -16,7 +16,7 @@
   (let [check (fn [source dest]
                 (as-> @state/app-state s
                   (assoc-in s [:terminal :fs] source)
-                  (command/exec {:exec :ssh} s (str " " dest))
+                  (command/exec {:exec :ssh :state s :args (str " " dest)})
                   (:state s)
                   (get-in s [:terminal :fs])))]
     (testing "ssh"

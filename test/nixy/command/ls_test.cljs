@@ -21,7 +21,7 @@
   (let [in-dir #(as-> % x
                   (assoc-in @state/app-state [:test-fs :filesystem :cwd] x)
                   (assoc-in x [:terminal :line] "ls")
-                  (command/exec {:exec :ls} x "")
+                  (command/exec {:exec :ls :state x :args ""})
                   (:stdout x))]
     (testing "ls"
       (testing "in root of filesystem"

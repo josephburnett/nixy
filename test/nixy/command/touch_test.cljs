@@ -19,7 +19,7 @@
   (let [check (fn [path filename]
                 (as-> @state/app-state s
                   (assoc-in s [:nixy :filesystem :cwd] path)
-                  (command/exec {:exec :touch} s (cons " " filename))
+                  (command/exec {:exec :touch :state s :args (cons " " filename)})
                   (:state s)
                   (get-in s (concat [:nixy :filesystem :root] path [filename]))))]
                   
@@ -31,7 +31,7 @@
   (let [check (fn [path filename]
                 (as-> @state/app-state s
                   (assoc-in s [:nixy :filesystem :cwd] path)
-                  (command/args-pred {:args-pred :touch} s filename)))]
+                  (command/args-pred {:args-pred :touch :state s :args filename})))]
     (testing "touch"
       (testing "in /"
         (is (= false (check [] " ")) "cannot create a file"))

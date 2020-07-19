@@ -1,10 +1,10 @@
 (ns nixy.command)
 
 (defmulti exec
-  (fn [file state args stdin] (:exec file)))
+  (fn [{:keys [exec]}] exec))
 
 (defmulti args-pred
-  (fn [file args] (:args-pred file)))
+  (fn [{:keys [args-pred]}] args-pred))
 
 (defn archive-line [state]
   (let [line (get-in state [:terminal :line])

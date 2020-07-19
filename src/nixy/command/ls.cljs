@@ -3,7 +3,7 @@
    [nixy.state.terminal :as terminal]
    [nixy.command :as command]))
 
-(defmethod command/exec :ls [_ state _ _]
+(defmethod command/exec :ls [{:keys [state]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         names (as-> state s

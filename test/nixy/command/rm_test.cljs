@@ -21,7 +21,7 @@
   (let [check (fn [in-dir rm-args]
                 (as-> @state/app-state s
                   (assoc-in s [:test-fs :filesystem :cwd] in-dir)
-                  (command/exec {:exec :rm} s rm-args)
+                  (command/exec {:exec :rm :state s :args rm-args})
                   (:state s)
                   (get-in s (concat [:test-fs :filesystem :root] in-dir))))]
     (testing "rm a file"
@@ -31,7 +31,7 @@
   (let [check (fn [in-dir rm-args]
                 (as-> @state/app-state s
                   (assoc-in s [:test-fs :filesystem :cwd] in-dir)
-                  (command/args-pred {:args-pred :rm} s rm-args)))]
+                  (command/args-pred {:args-pred :rm :state s :args rm-args})))]
     (testing "rm in usr"
       (is (= false (check ["usr"] "\n")) "must provide a filename")
       (is (= true (check ["usr"] " ")))

@@ -25,7 +25,7 @@
     (is (= (given " var") {}))))
 
 (defmethod command/args-pred :guide-test
-  [_ _ args]
+  [{:keys [args]}]
   (str/starts-with? " a\n" args))
 
 (deftest state->guide-test
