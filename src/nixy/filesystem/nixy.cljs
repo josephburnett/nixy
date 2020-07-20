@@ -6,6 +6,10 @@
     {:mod #{:x}
      :exec :ls
      :args-pred :enter-only}
+    "cat"
+    {:mod #{:x}
+     :exec :cat
+     :args-pred :cat}
     "clear"
     {:mod #{:x}
      :exec :clear

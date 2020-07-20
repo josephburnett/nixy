@@ -1,5 +1,6 @@
 (ns nixy.command.all
   (:require
+   [nixy.command.cat]
    [nixy.command.cd]
    [nixy.command.clear]
    [nixy.command.config]
