@@ -13,3 +13,7 @@ test :
 
 clean :
 	rm -rf target/public
+
+release : clean dist
+	gsutil -m cp -r resources/public/* gs://u.nixy.io
+	gsutil -m cp -r target/public/* gs://u.nixy.io
