@@ -35,6 +35,6 @@
    {"config"
     {:mod #{:rw}
      :cat "
-eyes.left.enabled=true
-eyes.right.enabled=true
+eyes.left=normal
+eyes.right=normal
 "}}})
