@@ -10,5 +10,6 @@
      :state
      (assoc-in state [:terminal :fs] fs)}))
 
-(defmethod command/args-pred :ssh-to-nixy [{:keys [state args]}]
-  (str/starts-with? " nixy\n" args))
+(defmethod command/args :ssh-to-nixy [{:keys [state args]}]
+  (if (str/starts-with? " nixy\n" args)
+    {:valid true} {}))

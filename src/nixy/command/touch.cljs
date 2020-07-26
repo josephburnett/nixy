@@ -14,7 +14,7 @@
                {:mod #{:r :w}
                 :cat ""})}))
 
-(defmethod command/args-pred :touch [{:keys [state args]}]
+(defmethod command/args :touch [{:keys [state args]}]
   (let [fs (get-in state [:terminal :fs])
         cwd (get-in state [fs :filesystem :cwd])
         files (keys (get-in state (concat [fs :filesystem :root] cwd)))
@@ -22,6 +22,7 @@
         valid (or (= " " args)
                   (not (nil? (re-matches #" [a-z]{1,8}\n{0,1}" args))))
         unique (not-any? #(= (str % "\n") filename) files)]
-    (and (= "usr" (first cwd))
-         valid
-         unique)))
+    (if (and (= "usr" (first cwd))
+             valid
+             unique)
+      {:valid true} {})))

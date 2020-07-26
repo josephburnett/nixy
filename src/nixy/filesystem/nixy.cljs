@@ -4,32 +4,32 @@
   {"bin"
    {"ls"
     {:mod #{:x}
-     :exec :ls
-     :args-pred :enter-only}
+     :exec-fn :ls
+     :args-fn :enter-only}
     "cat"
     {:mod #{:x}
-     :exec :cat
-     :args-pred :cat}
+     :exec-fn :cat
+     :args-fn :cat}
     "clear"
     {:mod #{:x}
-     :exec :clear
-     :args-pred :enter-only}
+     :exec-fn :clear
+     :args-fn :enter-only}
     "cd"
     {:mod #{:x}
-     :exec :cd
-     :args-pred :cd}
+     :exec-fn :cd
+     :args-fn :cd}
     "rm"
     {:mod #{:x}
-     :exec :rm
-     :args-pred :rm}
+     :exec-fn :rm
+     :args-fn :rm}
     "touch"
     {:mod #{:x}
-     :exec :touch
-     :args-pred :touch}
+     :exec-fn :touch
+     :args-fn :touch}
     "grep"
     {:mod #{:x}
-     :exec :grep
-     :args-pred :grep}}
+     :exec-fn :grep
+     :args-fn :grep}}
    "usr" {}
    "etc"
    {"config"

@@ -11,7 +11,8 @@
     {:stdout matching-lines
      :state state}))
 
-(defmethod command/args-pred :grep [{:keys [args]}]
-  (or (= " " args)
-      (not (nil? (re-matches #" [a-z]{0,10}" args)))
-      (not (nil? (re-matches #" [a-z]{1,10}\n" args)))))
+(defmethod command/args :grep [{:keys [args]}]
+  (if (or (= " " args)
+          (not (nil? (re-matches #" [a-z]{0,10}" args)))
+          (not (nil? (re-matches #" [a-z]{1,10}\n" args))))
+    {:valid true} {}))

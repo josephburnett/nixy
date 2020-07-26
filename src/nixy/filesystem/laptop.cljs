@@ -5,4 +5,4 @@
    {"ssh"
     {:mod #{:x}
      :exec :ssh
-     :args-pred :ssh-to-nixy}}})
+     :args :ssh-to-nixy}}})

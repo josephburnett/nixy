@@ -14,7 +14,7 @@
   (let [cd-from-to (fn [from to]
                      (as-> from x
                        (assoc-in @state/app-state [:nixy :filesystem :cwd] x)
-                       (command/exec {:exec :cd :state x :args to})
+                       (command/exec {:exec-fn :cd :state x :args to})
                        (:state x)
                        (get-in x [:nixy :filesystem :cwd])))]
     (is (= ["bin"] (cd-from-to [] " bin")))
@@ -24,16 +24,16 @@
   (let [in-dir (fn [dir args]
                  (as-> dir x
                    (assoc-in @state/app-state [:nixy :filesystem :cwd] x)
-                   (command/args-pred {:args-pred :cd :state x :args args})))]
+                   (:valid (command/args {:args-fn :cd :state x :args args}))))]
     (is (= true (in-dir [] " ")))
     (is (= true (in-dir [] " b")))
     (is (= true (in-dir [] " bin")))
     (is (= true (in-dir [] " bin\n")))
-    (is (= false (in-dir [] "..")))
-    (is (= false (in-dir [] " wrong")))
+    (is (= nil (in-dir [] "..")))
+    (is (= nil (in-dir [] " wrong")))
     (is (= true (in-dir ["bin"] " ")))
     (is (= true (in-dir ["bin"] " .")))
     (is (= true (in-dir ["bin"] " ..")))
     (is (= true (in-dir ["bin"] " ..\n")))
-    (is (= false (in-dir ["bin"] " wrong")))
-    (is (= false (in-dir ["bin"] " c")) "cannot cd into a file")))
+    (is (= nil (in-dir ["bin"] " wrong")))
+    (is (= nil (in-dir ["bin"] " c")) "cannot cd into a file")))

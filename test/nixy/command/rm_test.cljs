@@ -21,7 +21,7 @@
   (let [check (fn [in-dir rm-args]
                 (as-> @state/app-state s
                   (assoc-in s [:test-fs :filesystem :cwd] in-dir)
-                  (command/exec {:exec :rm :state s :args rm-args})
+                  (command/exec {:exec-fn :rm :state s :args rm-args})
                   (:state s)
                   (get-in s (concat [:test-fs :filesystem :root] in-dir))))]
     (testing "rm a file"
@@ -31,16 +31,16 @@
   (let [check (fn [in-dir rm-args]
                 (as-> @state/app-state s
                   (assoc-in s [:test-fs :filesystem :cwd] in-dir)
-                  (command/args-pred {:args-pred :rm :state s :args rm-args})))]
+                  (:valid (command/args {:args-fn :rm :state s :args rm-args}))))]
     (testing "rm in usr"
-      (is (= false (check ["usr"] "\n")) "must provide a filename")
+      (is (= nil (check ["usr"] "\n")) "must provide a filename")
       (is (= true (check ["usr"] " ")))
       (is (= true (check ["usr"] " f")))
       (is (= true (check ["usr"] " fi")))
       (is (= true (check ["usr"] " fil")))
       (is (= true (check ["usr"] " file")))
       (is (= true (check ["usr"] " file\n")))
-      (is (= false (check ["usr"] " nofile")) "file must exist"))
+      (is (= nil (check ["usr"] " nofile")) "file must exist"))
     (testing "rm is bin"
-      (is (= false (check ["bin"] " ")) "bin is off limits"))))
+      (is (= nil (check ["bin"] " ")) "bin is off limits"))))
 

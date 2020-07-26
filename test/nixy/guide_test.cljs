@@ -24,14 +24,15 @@
     (is (= (given " va") {"r" #{:t}}))
     (is (= (given " var") {}))))
 
-(defmethod command/args-pred :guide-test
+(defmethod command/args :guide-test
   [{:keys [args]}]
-  (str/starts-with? " a\n" args))
+  (if (str/starts-with? " a\n" args)
+    {:valid true} {}))
 
 (deftest state->guide-test
   (let [state (assoc-in @state/app-state
                         [:nixy :filesystem :root "bin"]
-                        {"cd" {:args-pred :guide-test}})
+                        {"cd" {:args-fn :guide-test}})
         given #(ng/state->guide (assoc-in state [:terminal :line] %))]
     (is (= (given "") {"c" #{:command}}))
     (is (= (given "c") {"d" #{:command}}))

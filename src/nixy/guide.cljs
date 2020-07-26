@@ -28,8 +28,8 @@
       (let [fs (get-in state [:terminal :fs])
             file (get-in state [fs :filesystem :root "bin" filename])
             args (subs command (count filename))
-            pred #(command/args-pred (merge file {:state state
-                                                  :args %}))]
+            pred #(:valid (command/args (merge file {:state state
+                                                     :args %})))]
         (pred-args->guide :args pred args))
       ;; guide from list of executable files
       (let [pred (fn [l] (->> command-names

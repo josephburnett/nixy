@@ -14,14 +14,13 @@
     {:stdout stdout
      :state state}))
 
-(defmethod command/args-pred :cat [{:keys [state args]}]
+(defmethod command/args :cat [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         current-dir (get-in state (concat [fs :filesystem :root] cwd))]
     (as-> current-dir x
-      (keys x)                                       ; all nodes
-      (filter #(get-in current-dir [% :mod]) x)      ; only files
-      (map #(str " " % "\n") x)                      ; add space and newline
-      (true? (some #(str/starts-with? % args) x))))) ; any matches?
-        
-  
+      (keys x)                                        ; all nodes
+      (filter #(get-in current-dir [% :mod]) x)       ; only files
+      (map #(str " " % "\n") x)                       ; add space and newline
+      (if (true? (some #(str/starts-with? % args) x)) ; any matches?
+        {:valid true} {}))))

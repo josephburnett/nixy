@@ -15,10 +15,11 @@
      (assoc-in state (concat [fs :filesystem :root] cwd)
                (dissoc dir filename))}))
 
-(defmethod command/args-pred :rm [{:keys [state args]}]
+(defmethod command/args :rm [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         files (keys (get-in state (concat [fs :filesystem :root] cwd)))
         exists (not (not-any? #(str/starts-with? (str " " % "\n") args) files))]
-    (and (= "usr" (first cwd))
-         exists)))
+    (if (and (= "usr" (first cwd))
+             exists)
+      {:valid true} {})))

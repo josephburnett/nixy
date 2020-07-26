@@ -2,5 +2,5 @@
   (:require
    [nixy.command :as command]))
 
-(defmethod command/args-pred :enter-only [{:keys [args]}]
-  (= "\n" args))
+(defmethod command/args :enter-only [{:keys [args]}]
+  (if (= "\n" args) {:valid true} {}))
