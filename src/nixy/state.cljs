@@ -16,6 +16,10 @@
    :terminal {:fs :laptop
               :line ""
               :output []}
-   :cookies #{}})
+   :cookies #{}
+   :jobs {:current nil
+          :activated #{}
+          :active #{}
+          :complete #{}}})
 
 (def app-state (atom initial-state))
