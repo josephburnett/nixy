@@ -1,30 +1,22 @@
-(ns nixy.jobs-test
+(ns nixy.job-test
   (:require
-   [cljs.test :refer-macros [deftest is testing use-fixtures]]
-   [nixy.state :as state]
+   [cljs.test :refer-macros [deftest is testing]]
+   [nixy.fixtures :refer merge-initial-state]
    [nixy.job :as job]))
 
-(defmethod job/setup :test-job-one [{:keys [state]}]
-  state)
+(deftest find-new-test
+  (testing "finds new jobs satisfying required cookies"
+    (let [jobs [:job-1]
+          state (merge-initial-state
+                 {})
+          check (fn [cookies]
+                  (as-> state s
+                    (assoc-in s [:cookies] cookies)
+                    (job/find-new s jobs)
+                    (get-in s [:jobs :activated])))]
+      (is (= #{:job-1} (check #{:cookie-1})))))
+  (testing "does not find jobs already activated"
+    (is (= true true)))
+  (testing "does not find jobs not satisfying required cookies"
+    (is (= true true))))
 
-(defmethod job/definition :test-job-one [_]
-  {:setup-fn :test-job-one
-   :guide-fn :test-job-one
-   :complete-fn :test-job-one
-   :title "Test Job One"
-   :required-cookies #{:test-cookie-one}
-   :intro ""
-   :help ""})
-
-(deftest activate-new-jobs-test
-  (let [check (fn [cookies]
-                (as-> state/initial-state s
-                  (assoc-in s [:cookies] cookies)
-                  (job/activate-new-jobs s [:test-job-one])
-                  (get-in s [:jobs])))]
-    (testing "new jobs activated"
-      (is (= #{:test-job-one} (:active (check #{:test-cookie-one}))))
-      (is (= #{:test-job-one} (:all (check #{:tests-cookies-one})))))
-    (testing "no new jobs activated"
-      (is (= #{} (:active (check #{}))))
-      (is (= #{} (:all (check #{})))))))

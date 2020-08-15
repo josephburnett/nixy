@@ -15,3 +15,6 @@
     (f)
     (reset! state/app-state
             state/initial-state)))
+
+(defn merge-initial-state [s]
+  (deep-merge state/initial-state))
