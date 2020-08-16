@@ -18,7 +18,7 @@
               :output []}
    :cookies #{}
    :jobs {:current nil
-          :activated #{}
+          :all #{}
           :active #{}
           :complete #{}}})
 

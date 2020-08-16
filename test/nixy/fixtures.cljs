@@ -3,7 +3,7 @@
    [nixy.state :as state]))
 
 ;; https://gist.github.com/danielpcox/c70a8aa2c36766200a95#gistcomment-2759497
-(defn- deep-merge [a b]
+(defn deep-merge [a b]
   (if (map? a)
     (merge-with deep-merge a b)
     b))
