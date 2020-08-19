@@ -9,7 +9,7 @@ repl :
 	clojure -A:fig:build
 
 test :
-	clojure -A:fig:test
+	clojure -A:fig:test 2>/dev/null
 
 clean :
 	rm -rf target/public

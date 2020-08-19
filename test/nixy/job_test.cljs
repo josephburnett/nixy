@@ -61,14 +61,14 @@
                          :have-cookies #{:tc-one}}))                   "incomplete set of cookies")
       )))))
 
-(deftest activate-test
-  (let [check (fn [{:keys [all-jobs
-                           active-jobs]
-                    :or   {all-jobs #{}
-                           active-jobs #{}}}]
-                (let [s (deep-merge
-                         test-app-state
-                         {:jobs {:all all-jobs
-                                 :active active-jobs}})]
-                  (binding [test-setup #(assoc-in % [:test-key] true)]
+;; (deftest activate-test
+;;   (let [check (fn [{:keys [all-jobs
+;;                            active-jobs]
+;;                     :or   {all-jobs #{}
+;;                            active-jobs #{}}}]
+;;                 (let [s (deep-merge
+;;                          test-app-state
+;;                          {:jobs {:all all-jobs
+;;                                  :active active-jobs}})]
+;;                   (binding [test-setup #(assoc-in % [:test-key] true)]
                     

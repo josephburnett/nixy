@@ -17,4 +17,4 @@
             state/initial-state)))
 
 (defn merge-initial-state [s]
-  (deep-merge state/initial-state))
+  (deep-merge state/initial-state s))
