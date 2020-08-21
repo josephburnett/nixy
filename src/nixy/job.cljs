@@ -15,11 +15,12 @@
   (fn [{:keys [complete-fn]}] complete-fn))
 
 (defn find-new [state jobs]
-  (let [satisfied (filter #(let [j (definition %)]
-                             (set/superset?
-                              (:cookies state)
-                              (:required-cookies j)))
-                          jobs)]
+  (let [satisfied (into #{}
+                        (filter #(let [j (definition %)]
+                                   (set/superset?
+                                    (:cookies state)
+                                    (:required-cookies j)))
+                                jobs))]
     (set/difference satisfied (get-in state [:jobs :all]))))
 
 (defn activate [state jobs]

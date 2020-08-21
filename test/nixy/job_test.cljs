@@ -45,21 +45,21 @@
                     (job/find-new s [:test-job]))))]
     (testing "finds new jobs satisfying required cookies"
       (is (= #{:test-job} (check {:required-cookies #{:test-cookie}
-                                  :have-cookies #{:test-cookies}}))    "one cookie")
+                                  :have-cookies #{:test-cookie}}))    "one cookie")
       (is (= #{:test-job} (check {:required-cookies #{:tc-one :tc-two}
                                   :have-cookies #{:tc-one :tc-two}}))  "two cookies")
       (is (= #{:test-job} (check {:required-cookies #{:tc-one}
-                                  :have-cookies #{:tc-one :tc-two}}))  "extra cookie")
+                                  :have-cookies #{:tc-one :tc-two}}))  "extra cookie"))
     (testing "does not find jobs already activated"
       (is (= #{} (check {:required-cookies #{:test-cookie}
                          :have-cookies #{:test-cookie}
-                         :all-jobs #{:test-job}}))                     "already activated job")
+                         :all-jobs #{:test-job}}))                     "already activated job"))
     (testing "does not find jobs not satisfying required cookies"
       (is (= #{} (check {:required-cookies #{:test-cookie}
                          :have-cookies #{:not-cookie}}))               "wrong cookie")
       (is (= #{} (check {:required-cookies #{:tc-one :tc-two}
                          :have-cookies #{:tc-one}}))                   "incomplete set of cookies")
-      )))))
+      )))
 
 ;; (deftest activate-test
 ;;   (let [check (fn [{:keys [all-jobs
