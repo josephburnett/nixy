@@ -2,7 +2,7 @@
   (:require
    [cljs.test :refer-macros [deftest is testing]]
    [nixy.state :as state]
-   [nixy.fixtures :refer deep-merge]
+   [nixy.fixtures :refer [deep-merge]]
    [nixy.job :as job]))
 
 (def test-app-state state/initial-state)
@@ -12,7 +12,7 @@
 (def ^:dynamic test-required-cookies nil)
 (def ^:dynamic test-activated-cookies nil)
 
-(defmulti job/definition :test-job [_]
+(defmethod job/definition :test-job [_]
   {:setup-fn :test-job
    :guide-fn :test-job
    :complete-fn :test-job
@@ -21,13 +21,13 @@
    :intro "Test Intro"
    :help "Test Help"})
 
-(defmulti job/setup :test-job [{:keys [state]}]
+(defmethod job/setup :test-job [{:keys [state]}]
   (test-setup state))
 
-(defmulti job/guide :test-job [{:keys [state line]}]
+(defmethod job/guide :test-job [{:keys [state line]}]
   (test-guide state line))
 
-(defmulti job/complete? :test-job [{keys [state]}]
+(defmethod job/complete? :test-job [{:keys [state]}]
   (test-complete? state))
 
 (deftest find-new-test
@@ -41,14 +41,14 @@
                          test-app-state
                          {:cookies have-cookies
                           :jobs {:all all-jobs}})]
-                  (binding [test-required-cookies required]
-                    (find-new s [:test-job]))))]
+                  (binding [test-required-cookies required-cookies]
+                    (job/find-new s [:test-job]))))]
     (testing "finds new jobs satisfying required cookies"
       (is (= #{:test-job} (check {:required-cookies #{:test-cookie}
                                   :have-cookies #{:test-cookies}}))    "one cookie")
       (is (= #{:test-job} (check {:required-cookies #{:tc-one :tc-two}
                                   :have-cookies #{:tc-one :tc-two}}))  "two cookies")
-      (is (= #{:test-job} (check {:required-cookies #(:tc-one}
+      (is (= #{:test-job} (check {:required-cookies #{:tc-one}
                                   :have-cookies #{:tc-one :tc-two}}))  "extra cookie")
     (testing "does not find jobs already activated"
       (is (= #{} (check {:required-cookies #{:test-cookie}

@@ -33,16 +33,18 @@
   (if (str/starts-with? " a\n" args)
     {:valid true} {}))
 
+(def null-guide (ng/potential-fn->guide (fn [_] {}) ""))
+
 (deftest state->guide-test
   (let [state (assoc-in @state/app-state
                         [:nixy :filesystem :root "bin"]
                         {"cd" {:args-fn :guide-test}})
         check (fn [line must-have]
                 (let [guide (ng/state->guide (assoc-in state [:terminal :line] line))
-                      expect (merge guide must-have)]
+                      expect (merge null-guide must-have)]
                   (= guide expect)))]
-    (is (= true (check "" {"c" #{:command}})))
-    (is (= true (check "c" {"d" #{:command}})))
-    (is (= true (check "cd" {" " #{:args}})))
-    (is (= true (check "cd " {"a" #{:args}})))
-    (is (= true (check "cd a" {"\n" #{:args}})))))
+    (is (= true (check "" {"c" {:valid true :command true}})))
+    (is (= true (check "c" {"d" {:valid true :command true}})))
+    (is (= true (check "cd" {" " {:valid true :args true}})))
+    (is (= true (check "cd " {"a" {:valid true :args true}})))
+    (is (= true (check "cd a" {"\n" {:valid true :args true}})))))

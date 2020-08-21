@@ -35,15 +35,17 @@
       ; guide from command args
       (let [file (get-in state [fs :filesystem :root "bin" filename])
             args (subs partial-command (count filename))
-            pot-fn #(merge (command/args (merge file {:state state
-                                                      :args %}))
-                           {:args true})]
+            pot-fn #(let [args-guide (command/args (merge file {:state state
+                                                                :args %}))]
+                      (if (:valid args-guide)
+                        (merge args-guide {:args true})
+                        args-guide))]
         (potential-fn->guide pot-fn args))
       ; guide from commands
       (let [commands (keys (get-in state [fs :filesystem :root "bin"]))
             pot-fn (fn [c] (if (->> commands
-                                   (filter #(str/starts-with? c partial-command))
-                                   not-empty)
+                                    (filter #(str/starts-with? % c))
+                                    not-empty)
                             {:valid true :command true} {}))]
         (potential-fn->guide pot-fn partial-command)))))
 
