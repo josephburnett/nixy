@@ -46,3 +46,11 @@
     (reduce #(update-in %1 [:jobs :completed] conj #{%2}) s jobs)         ; complete jobs
     (if (nil? (get-in s [:jobs :current]))                                ; maybe set current
       (assoc-in s [:jobs :current] (first jobs)) s)))
+
+(defn activate-new-jobs [state jobs]
+  (let [new (find-new state jobs)]
+    (activate state new)))
+
+(defn complete-active-jobs [state]
+  (let [comp (find-complete state)]
+    (complete state comp)))
