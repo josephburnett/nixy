@@ -4,7 +4,6 @@
     ;; require all the namespaces that you want to test
     [nixy.cookies-test]
     [nixy.guide-test]
-    [nixy.layer-test]
     [nixy.job-test]
     [nixy.command.all-test]
     [figwheel.main.testing :refer [run-tests-async]]))
