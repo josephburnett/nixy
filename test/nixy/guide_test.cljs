@@ -2,7 +2,7 @@
   (:require
    [clojure.string :as str]
    [cljs.test :refer-macros [deftest is testing use-fixtures]]
-   [nixy.fixtures :refer [merge-state]]
+   [nixy.fixtures :refer [merge-state null-guide]]
    [nixy.state :as state]
    [nixy.guide :as ng]
    [nixy.command :as command]))
@@ -11,18 +11,22 @@
   (merge-state
    {:terminal {:fs :nixy}}))
 
-(deftest pred-args->guide-test
-  (let [pred #(or (str/starts-with? " etc" %)
-                  (str/starts-with? " var" %))
-        given (partial ng/pred-args->guide :t pred)]
-    (is (= (given "") {" " #{:t}}))
-    (is (= (given " ") {"e" #{:t} "v" #{:t}}))
-    (is (= (given " e") {"t" #{:t}}))
-    (is (= (given " et") {"c" #{:t}}))
-    (is (= (given " etc") {}))
-    (is (= (given " v") {"a" #{:t}}))
-    (is (= (given " va") {"r" #{:t}}))
-    (is (= (given " var") {}))))
+(deftest potential-fn->guide-test
+  (let [pot-fn #(if (or (str/starts-with? " etc\n" %)
+                        (str/starts-with? " var\n" %))
+                  #{:t} #{})
+        check (fn [line must-have]
+                (let [guide (ng/potential-fn->guide pot-fn line)
+                      expect (merge guide must-have)]
+                  (= guide expect)))]
+    (is (= true (check "" {" " #{:t}})))
+    (is (= true (check " " {"e" #{:t} "v" #{:t}})))
+    (is (= true (check " e" {"t" #{:t}})))
+    (is (= true (check " et" {"c" #{:t}})))
+    (is (= true (check " etc" {})))
+    (is (= true (check " v" {"a" #{:t}})))
+    (is (= true (check " va" {"r" #{:t}})))
+    (is (= true (check " var" {})))))
 
 (defmethod command/args :guide-test
   [{:keys [args]}]
@@ -33,9 +37,12 @@
   (let [state (assoc-in @state/app-state
                         [:nixy :filesystem :root "bin"]
                         {"cd" {:args-fn :guide-test}})
-        given #(ng/state->guide (assoc-in state [:terminal :line] %))]
-    (is (= (given "") {"c" #{:command}}))
-    (is (= (given "c") {"d" #{:command}}))
-    (is (= (given "cd") {" " #{:args}}))
-    (is (= (given "cd ") {"a" #{:args}}))
-    (is (= (given "cd a") {"\n" #{:args}}))))
+        check (fn [line must-have]
+                (let [guide (ng/state->guide (assoc-in state [:terminal :line] line))
+                      expect (merge null-guide must-have)]
+                  (= guide expect)))]
+    (is (= true (check "" {"c" {:valid true :command true}})))
+    (is (= true (check "c" {"d" {:valid true :command true}})))
+    (is (= true (check "cd" {" " {:valid true :args true}})))
+    (is (= true (check "cd " {"a" {:valid true :args true}})))
+    (is (= true (check "cd a" {"\n" {:valid true :args true}})))))

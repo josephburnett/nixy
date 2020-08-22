@@ -62,7 +62,7 @@
                    "\n" "↵"
                    key)
         key-color (cond
-                    (contains? guide key) "yellow"
+                    (get-in guide [key :valid]) "yellow"
                     :else "white")]
     (aset ctx "fillStyle" key-color)
     (shape/roundRect ctx
@@ -90,5 +90,5 @@
     (doall (map #(row ctx state guide %1 %2)
                 ["qwertyuiop"
                  "asdfghjkl\n"
-                 "zxcv bnm."]
+                 "zxcv bnm.|"]
                 (range)))))
