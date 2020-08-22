@@ -27,5 +27,5 @@
 (def null-guide (ng/potential-fn->guide (fn [_] {}) ""))
 
 ;; Do nothing function.
-(defn null-fn [{:keys [state]}]
+(defn null-fn [state]
   state)

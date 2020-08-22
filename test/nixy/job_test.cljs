@@ -61,8 +61,7 @@
       (is (= #{} (check {:require #{:test-cookie}
                          :have    #{:not-cookie}}))                "wrong cookie")
       (is (= #{} (check {:require #{:tc-one :tc-two}
-                         :have    #{:tc-one}}))                    "incomplete set of cookies"))
-    ))
+                         :have    #{:tc-one}}))                    "incomplete set of cookies"))))
 
 (deftest activate-test
   (let [check (fn [jobs]
@@ -71,15 +70,15 @@
                     (job/activate s jobs)
                     (:setup-count s))))]
     (testing "runs setup fn"
-      (is (= 0 (check []))           "no jobs to setup")
-      (is (= 1 (check [:test-job]))  "one job to setup")
+      (is (= 0 (check []))                      "no jobs to setup")
+      (is (= 1 (check [:test-job]))             "one job to setup")
       (is (= 2 (check [:test-job
-                       :test-job]))  "two jobs to setup")))
+                       :test-job]))             "two jobs to setup")))
   (let [check (fn [jobs]
                 (as-> (test-state) s
                   (job/activate s jobs)
                   (get-in s [:jobs :all])))]
-    (testing "adds to all jobs"
+    (testing "adds to :jobs :all"
       (is (= #{} (check []))                    "no jobs to activate")
       (is (= #{:test-job} (check [:test-job]))  "one job to activate"))))
                     

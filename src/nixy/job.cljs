@@ -42,11 +42,11 @@
 ;; choose the first one.
 (defn activate [state jobs]
   (as-> state s
-    (reduce #(update-in %1 [:jobs :all] conj #{%2}) s jobs)     ; all jobs ever activated
-    (reduce #(update-in %1 [:jobs :active] conj #{%2}) s jobs)  ; currently active jobs
-    (reduce #(setup (merge (definition %2)                      ; setup jobs
+    (reduce #(update-in %1 [:jobs :all] conj %2) s jobs)     ; all jobs ever activated
+    (reduce #(update-in %1 [:jobs :active] conj %2) s jobs)  ; currently active jobs
+    (reduce #(setup (merge (definition %2)                   ; setup jobs
                            {:state %1})) s jobs)
-    (if (nil? (get-in s [:jobs :current]))                      ; maybe set current
+    (if (nil? (get-in s [:jobs :current]))                   ; maybe set current
       (assoc-in s [:jobs :current] (first jobs)) s)))
 
 ;; Find activated jobs which satisfy their complete? function.
