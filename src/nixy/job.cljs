@@ -7,6 +7,7 @@
 ;; - title
 ;; - setup-fn (key)
 ;; - guide-fn (key)
+;; - grant-cookies-fn (key)
 ;; - complete-fn (key)
 ;; - required-cookies (set of keys)
 (defmulti definition
@@ -20,6 +21,10 @@
 ;; E.g. {"a" {:valid true} "b" {}}
 (defmulti guide
   (fn [{:keys [guide-fn]}] guide-fn))
+
+;; Can I have a cookie?  Jobs provide cookies which unlock other jobs.
+(defmulti cookies
+  (fn [{:keys [cookies-fn]}] cookies-fn))
 
 ;; Is this job complete?
 (defmulti complete?

@@ -2,11 +2,12 @@
   (:require
    [cljs.test :refer-macros [deftest is testing]]
    [nixy.state :as state]
-   [nixy.fixtures :refer [deep-merge null-cookies null-guide null-fn]]
+   [nixy.fixtures :refer [deep-merge null-cookies null-guide null-cookies null-fn]]
    [nixy.job :as job]))
 
-(def ^:dynamic test-job-setup null-fn)
+(def ^:dynamic test-job-setup null-setup)
 (def ^:dynamic test-job-guide null-guide)
+(def ^:dynamic test-job-cookies null-cookies)
 (def ^:dynamic test-job-complete? (fn [_] false))
 (def ^:dynamic test-job-required-cookies null-cookies)
 
@@ -14,6 +15,7 @@
   {:title "Test Job"
    :setup-fn :test-job
    :guide-fn :test-job
+   :cookies-fn :test-job
    :complete-fn :test-job
    :required-cookies test-job-required-cookies})
 
@@ -22,6 +24,9 @@
 
 (defmethod job/guide :test-job [{:keys [state line]}]
   (test-job-guide state line))
+
+(defmethod job/cookies :test-job [{:keys [state]}]
+  (test-job-cookies state))
 
 (defmethod job/complete? :test-job [{:keys [state]}]
   (test-job-complete? state))

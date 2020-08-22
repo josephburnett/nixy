@@ -20,12 +20,14 @@
 (defn merge-initial-state [s]
   (deep-merge state/initial-state s))
 
-;; Do nothing cookies.
-(def null-cookies [:impossible])
+;; Impossible required cookies.
+(def null-cookies [:impossible-to-get])
 
 ;; Do nothing guide.
 (def null-guide (ng/potential-fn->guide (fn [_] {}) ""))
 
-;; Do nothing function.
-(defn null-fn [state]
-  state)
+;; Provide no cookies.
+(defn null-cookies [_] #{})
+
+;; Do nothing setup function.
+(defn null-setup [state] state)

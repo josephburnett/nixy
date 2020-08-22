@@ -8,16 +8,20 @@
     (assoc-in state [:cookies] cookies)))
 
 (defn find-new [state cookie-preds]
-  (let [cookies (reduce
-                 (fn [cookies {:keys [pred key]}]
-                      (if (pred state)
-                        (conj cookies key)
-                        cookies))
-                 #{}
-                 cookie-preds)]
-    (set/difference cookies (:cookies state))))
+  (let [active (get-in state [:jobs :active])
+        ;; cookies (reduce
+        ;;          (fn [cookies {:keys [pred key]}]
+        ;;               (if (pred state)
+        ;;                 (conj cookies key)
+        ;;                 cookies))
+        ;;          #{}
+        ;;          cookie-preds)]
 
-(def cookie-preds (concat commands/preds))
+        ; TODO: query active jobs for cookies
+        ;       jobs should say what cookies they are offering (rename)
+        ;       this function will dedupe
+        ]
+    (set/difference cookies (:cookies state))))
 
 (defn grant-new-cookies [state]
   (let [new-cookies (find-new state cookie-preds)
