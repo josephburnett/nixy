@@ -42,21 +42,22 @@
       (job/complete-active-jobs s))))    ; complete jobs
 
 (defn press-key [current-state key]
-  (let [current-guide (guide/state->guide current-state)]
+  (let [current-guide (guide/state->guide current-state)
+        valid? #(get-in current-guide [% :valid])]
     (cond
       ;; Run a complete command
       (and (= "Enter" key)
-           (contains? current-guide "\n"))
+           (valid? "\n"))
       (run-line current-state)
       ;; Pipe to a new command
       (and (= "|" key)
-           (contains? current-guide "\n"))
+           (valid? "\n"))
       (terminal/append-key current-state "|")
       ;; Delete characters
       (= "Backspace" key)
       (terminal/drop-key current-state)
       ;; Add characters
-      (contains? current-guide key)
+      (valid? key)
       (terminal/append-key current-state key)
       ;; Ignore
       :default current-state)))
