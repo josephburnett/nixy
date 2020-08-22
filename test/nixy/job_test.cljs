@@ -40,42 +40,46 @@
            :complete test-state-complete-jobs}}))
 
 (deftest find-new-test
-  (let [check (fn [{:keys [required-cookies
-                           have-cookies
-                           all-jobs]
-                    :or   {required-cookies #{}
-                           have-cookies #{}
-                           all-jobs #{}}}]
-                (binding [test-job-required-cookies required-cookies
-                          test-state-cookies        have-cookies
-                          test-state-all-jobs       all-jobs]
+  (let [check (fn [{:keys [require have all]
+                    :or   {require #{} have #{} all #{}}}]
+                (binding [test-job-required-cookies require
+                          test-state-cookies        have
+                          test-state-all-jobs       all]
                   (job/find-new (test-state) [:test-job])))]
-    (testing "finds new jobs satisfying required cookies"
-      (is (= #{:test-job} (check {:required-cookies #{:test-cookie}
-                                  :have-cookies #{:test-cookie}}))      "one cookie")
-      (is (= #{:test-job} (check {:required-cookies #{:tc-one :tc-two}
-                                  :have-cookies #{:tc-one :tc-two}}))   "two cookies")
-      (is (= #{:test-job} (check {:required-cookies #{:tc-one}
-                                  :have-cookies #{:tc-one :tc-two}}))   "extra cookie"))
-    (testing "does not find jobs already activated"
-      (is (= #{} (check {:required-cookies #{:test-cookie}
-                         :have-cookies #{:test-cookie}
-                         :all-jobs #{:test-job}}))                      "already activated job"))
-    (testing "does not find jobs not satisfying required cookies"
-      (is (= #{} (check {:required-cookies #{:test-cookie}
-                         :have-cookies #{:not-cookie}}))                "wrong cookie")
-      (is (= #{} (check {:required-cookies #{:tc-one :tc-two}
-                         :have-cookies #{:tc-one}}))                    "incomplete set of cookies")
-      )))
+    (testing "finds new job satisfying required cookies"
+      (is (= #{:test-job} (check {:require #{:test-cookie}
+                                  :have    #{:test-cookie}}))      "one cookie")
+      (is (= #{:test-job} (check {:require #{:tc-one :tc-two}
+                                  :have    #{:tc-one :tc-two}}))   "two cookies")
+      (is (= #{:test-job} (check {:require #{:tc-one}
+                                  :have    #{:tc-one :tc-two}}))   "extra cookie"))
+    (testing "does not find job already activated"
+      (is (= #{} (check {:require #{:test-cookie}
+                         :have    #{:test-cookie}
+                         :all     #{:test-job}}))                  "already activated job"))
+    (testing "does not find job not satisfying required cookies"
+      (is (= #{} (check {:require #{:test-cookie}
+                         :have    #{:not-cookie}}))                "wrong cookie")
+      (is (= #{} (check {:require #{:tc-one :tc-two}
+                         :have    #{:tc-one}}))                    "incomplete set of cookies"))
+    ))
 
-;; (deftest activate-test
-;;   (let [check (fn [{:keys [all-jobs
-;;                            active-jobs]
-;;                     :or   {all-jobs #{}
-;;                            active-jobs #{}}}]
-;;                 (let [s (deep-merge
-;;                          test-app-state
-;;                          {:jobs {:all all-jobs
-;;                                  :active active-jobs}})]
-;;                   (binding [test-setup #(assoc-in % [:test-key] true)]
+(deftest activate-test
+  (let [check (fn [jobs]
+                (binding [test-job-setup #(update-in % [:setup-count] inc)]
+                  (as-> (assoc (test-state) :setup-count 0) s
+                    (job/activate s jobs)
+                    (:setup-count s))))]
+    (testing "runs setup fn"
+      (is (= 0 (check []))           "no jobs to setup")
+      (is (= 1 (check [:test-job]))  "one job to setup")
+      (is (= 2 (check [:test-job
+                       :test-job]))  "two jobs to setup")))
+  (let [check (fn [jobs]
+                (as-> (test-state) s
+                  (job/activate s jobs)
+                  (get-in s [:jobs :all])))]
+    (testing "adds to all jobs"
+      (is (= #{} (check []))                    "no jobs to activate")
+      (is (= #{:test-job} (check [:test-job]))  "one job to activate"))))
                     
