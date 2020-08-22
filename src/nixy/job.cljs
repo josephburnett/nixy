@@ -51,20 +51,21 @@
 
 ;; Find activated jobs which satisfy their complete? function.
 (defn find-complete [state]
-  (filter #(let [j (definition %)]
-             (complete? (merge j
-                               {:state state})))
-          (get-in state [:jobs :active])))
+  (into #{}
+        (filter #(let [j (definition %)]
+                   (complete? (merge j
+                                     {:state state})))
+                (get-in state [:jobs :active]))))
 
 ;; Given a collection of jobs, record them as being complete. Select a
 ;; new job.
 (defn complete [state jobs]
   (as-> state s
-    (reduce
-     (fn [state key] (update-in state [:jobs :active] #(disj % #{key})))  ; deactivate jobs
-     s jobs)
-    (reduce #(update-in %1 [:jobs :completed] conj #{%2}) s jobs)         ; complete jobs
-    (if (nil? (get-in s [:jobs :current]))                                ; maybe set current
+    (reduce (fn [state key]
+              (update-in state [:jobs :active] #(disj % #{key})))  ; deactivate jobs
+            s jobs)
+    (reduce #(update-in %1 [:jobs :completed] conj %2) s jobs)     ; complete jobs
+    (if (nil? (get-in s [:jobs :current]))                         ; maybe set current
       (assoc-in s [:jobs :current] (first jobs)) s)))
 
 (defn activate-new-jobs [state jobs]

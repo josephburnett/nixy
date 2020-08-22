@@ -30,6 +30,7 @@
 (def ^:dynamic test-state-all-jobs #{})
 (def ^:dynamic test-state-active-jobs #{})
 (def ^:dynamic test-state-complete-jobs #{})
+(def ^:dynamic test-state-current-job nil)
 
 (defn test-state []
   (deep-merge
@@ -37,7 +38,8 @@
    {:cookies test-state-cookies
     :jobs {:all test-state-all-jobs
            :active test-state-active-jobs
-           :complete test-state-complete-jobs}}))
+           :complete test-state-complete-jobs
+           :current test-state-current-job}}))
 
 (deftest find-new-test
   (let [check (fn [{:keys [require have all]
@@ -70,14 +72,41 @@
                     (job/activate s jobs)
                     (:setup-count s))))]
     (testing "runs setup fn"
-      (is (= 0 (check []))                      "no jobs to setup")
-      (is (= 1 (check [:test-job]))             "one job to setup")
+      (is (= 0 (check []))                                "no jobs to setup")
+      (is (= 1 (check [:test-job]))                       "one job to setup")
       (is (= 2 (check [:test-job
-                       :test-job]))             "two jobs to setup")))
-  (let [check (fn [jobs]
+                       :test-job]))                       "two jobs to setup")))
+  (let [check (fn [key jobs]
                 (as-> (test-state) s
                   (job/activate s jobs)
-                  (get-in s [:jobs :all])))]
-    (testing "adds to :jobs :all"
-      (is (= #{} (check []))                    "no jobs to activate")
-      (is (= #{:test-job} (check [:test-job]))  "one job to activate"))))
+                  (get-in s [:jobs key])))]
+    (testing "adds to :jobs"
+      (testing "adds to :all"
+        (is (= #{} (check :all []))                       "no jobs to activate")
+        (is (= #{:test-job} (check :all [:test-job]))     "one job to activate"))
+      (testing "adds to :active"
+        (is (= #{} (check :active []))                    "no jobs to activate")
+        (is (= #{:test-job} (check :active [:test-job]))  "one job to activate")))))
+
+(deftest find-complete-test
+  (let [check (fn [{:keys [active current done]}]
+                (binding [test-job-complete? #(:done %)
+                          test-state-active-jobs active
+                          test-state-current-job current]
+                  (job/find-complete (assoc (test-state) :done done))))]
+  (testing "finds nothing"
+    (is (= #{} (check {:active #{}
+                       :current nil}))                 "no active jobs")
+    (is (= #{} (check {:active #{:test-job}
+                       :current :test-job}))           "not satisfactory"))
+  (testing "finds satisfactory job"
+    (is (= #{:test-job} (check {:active #{:test-job}
+                                :current :test-job
+                                :done true}))          "is current job")
+    (is (= #{:test-job} (check {:active #{:test-job}
+                                :current :other-job
+                                :done true}))          "is not current job")
+    (is (= #{:test-job} (check {:active #{:test-job}
+                                :current nil
+
+                                :done true}))          "there is no current job"))))
