@@ -62,11 +62,14 @@
 (defn complete [state jobs]
   (as-> state s
     (reduce (fn [state key]
-              (update-in state [:jobs :active] #(disj % #{key})))  ; deactivate jobs
+              (update-in state [:jobs :active] #(disj % key)))  ; deactivate jobs
             s jobs)
-    (reduce #(update-in %1 [:jobs :completed] conj %2) s jobs)     ; complete jobs
-    (if (nil? (get-in s [:jobs :current]))                         ; maybe set current
-      (assoc-in s [:jobs :current] (first jobs)) s)))
+    (if (not-any? #(= (get-in s [:jobs :current]) %) jobs) s    ; maybe unset current
+        (assoc-in s [:jobs :current] nil))
+    (reduce #(update-in %1 [:jobs :complete] conj %2) s jobs)   ; complete jobs
+    (if (nil? (get-in s [:jobs :current]))                      ; maybe set current
+      (assoc-in s [:jobs :current]
+                (first (get-in s [:jobs :active]))) s)))
 
 (defn activate-new-jobs [state jobs]
   (let [new (find-new state jobs)]

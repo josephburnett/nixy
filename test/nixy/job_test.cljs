@@ -110,3 +110,36 @@
                                 :current nil
 
                                 :done true}))          "there is no current job"))))
+
+(deftest complete-test
+  (let [check (fn [{:keys [key active current]}]
+                (binding [test-state-active-jobs active
+                          test-state-current-job current]
+                  (as-> (test-state) s
+                    (job/complete s [:test-job])
+                    (get-in s [:jobs key]))))]
+    (testing "adds to :jobs :complete"
+      (is (= #{:test-job} (check {:key :complete
+                                  :active #{:test-job}
+                                  :current :test-job}))    "current active job")
+      (is (= #{:test-job} (check {:key :complete
+                                  :active #{:other-job}
+                                  :current :other-job}))   "not an active job")
+      (is (= #{:test-job} (check {:key :complete
+                                  :active #{}
+                                  :current nil}))          "no active or current job"))
+    (testing "removes from :jobs :active"
+      (is (= #{} (check {:key :active
+                         :active #{:test-job}
+                         :current :test-job}))             "current active job")
+      (is (= #{:other-job} (check {:key :active
+                                   :active #{:other-job}
+                                   :current :other-job}))  "not an active job")
+      (is (= #{} (check {:key :active
+                         :active #{}
+                         :current nil}))                   "no active or current job"))
+    (testing "sets new current job"
+      (is (= :other-job (check {:key :current
+                                :active #{:test-job
+                                          :other-job}
+                                :current :test-job}))      "current active job"))))
