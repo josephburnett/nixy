@@ -2,7 +2,7 @@
   (:require
    [clojure.string :as str]
    [cljs.test :refer-macros [deftest is testing use-fixtures]]
-   [nixy.fixtures :refer [merge-state]]
+   [nixy.fixtures :refer [merge-state null-guide]]
    [nixy.state :as state]
    [nixy.guide :as ng]
    [nixy.command :as command]))
@@ -32,8 +32,6 @@
   [{:keys [args]}]
   (if (str/starts-with? " a\n" args)
     {:valid true} {}))
-
-(def null-guide (ng/potential-fn->guide (fn [_] {}) ""))
 
 (deftest state->guide-test
   (let [state (assoc-in @state/app-state

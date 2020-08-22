@@ -1,5 +1,6 @@
 (ns nixy.fixtures
   (:require
+   [nixy.guide :as ng]
    [nixy.state :as state]))
 
 ;; https://gist.github.com/danielpcox/c70a8aa2c36766200a95#gistcomment-2759497
@@ -18,3 +19,13 @@
 
 (defn merge-initial-state [s]
   (deep-merge state/initial-state s))
+
+;; Do nothing cookies.
+(def null-cookies [:impossible])
+
+;; Do nothing guide.
+(def null-guide (ng/potential-fn->guide (fn [_] {}) ""))
+
+;; Do nothing function.
+(defn null-fn [{:keys [state]}]
+  state)
