@@ -21,7 +21,7 @@
   (deep-merge state/initial-state s))
 
 ;; Impossible required cookies.
-(def null-cookies [:impossible-to-get])
+(def impossible-cookies [:impossible-to-get])
 
 ;; Do nothing guide.
 (def null-guide (ng/potential-fn->guide (fn [_] {}) ""))

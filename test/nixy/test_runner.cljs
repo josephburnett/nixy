@@ -2,7 +2,6 @@
 (ns nixy.test-runner
   (:require
     ;; require all the namespaces that you want to test
-    [nixy.cookies-test]
     [nixy.guide-test]
     [nixy.job-test]
     [nixy.command.all-test]

@@ -33,7 +33,7 @@
 ;; Given a list of jobs (keys) find those
 ;; which satisfy their required cookies
 ;; and have not been previously activated.
-(defn find-new [state jobs]
+(defn find-jobs [state jobs]
   (let [satisfied (into #{}
                         (filter #(let [j (definition %)]
                                    (set/superset?
@@ -77,9 +77,28 @@
                 (first (get-in s [:jobs :active]))) s)))
 
 (defn activate-new-jobs [state jobs]
-  (let [new (find-new state jobs)]
+  (let [new (find-jobs state jobs)]
     (activate state new)))
 
 (defn complete-active-jobs [state]
   (let [comp (find-complete state)]
     (complete state comp)))
+
+;; Find new cookies to grant by querying each active job.
+(defn find-cookies [state]
+  (let [all-cookies (reduce
+                     (fn [all-cookies job]
+                       (cookies (merge (definition job)
+                                       {:state state})))
+                     #{}
+                     (get-in state [:jobs :active]))]
+    (set/difference all-cookies (:cookies state))))
+
+;; Grant a collection of cookies.
+(defn grant [state new-cookies]
+  (let [cookies (set/union (:cookies state) new-cookies)]
+    (assoc-in state [:cookies] cookies)))
+
+(defn grant-new-cookies [state]
+  (let [new-cookies (find-cookies state)]
+    (grant state new-cookies)))
