@@ -1,28 +1,28 @@
 (ns nixy.job
+  "Jobs are concurrent tasks (quests) which a user may activate and
+  complete. Jobs are activated by obtaining the required cookies. And
+  jobs are completed by following the `guide` to obtain a desired
+  application state. Along the way, jobs provide additional cookies
+  which may activate other jobs."
   (:require
    [clojure.set :as set]))
 
-;; Provide a map defining the job.
-;; Required keys:
-;; - title
-;; - setup-fn (key)
-;; - guide-fn (key)
-;; - grant-cookies-fn (key)
-;; - complete-fn (key)
-;; - required-cookies (set of keys)
 (defmulti definition
+  "Provides the definition of a job."
   (fn [key] key))
 
-;; Setup the conditions of the job.  Must be idempotent.
 (defmulti setup
+  "Mutates `state` to setup the job."
   (fn [{:keys [setup-fn]}] setup-fn))
 
-;; Map valid keys to their capabilities.
-;; E.g. {"a" {:valid true} "b" {}}
 (defmulti guide
+  "Determines if `line` is recommended for this job given `state`. If
+  it is, `guide` must return a map which includes `{:job true}`. Other
+  keys are permitted to provide additional context."
   (fn [{:keys [guide-fn]}] guide-fn))
 
-;; Can I have a cookie?  Jobs provide cookies which unlock other jobs.
+;; Maybe provide cookies based on the current state. Provided cookies
+;; may unlock other jobs.
 (defmulti cookies
   (fn [{:keys [cookies-fn]}] cookies-fn))
 
@@ -30,9 +30,8 @@
 (defmulti complete?
   (fn [{:keys [complete-fn]}] complete-fn))
 
-;; Given a list of jobs (keys) find those
-;; which satisfy their required cookies
-;; and have not been previously activated.
+;; Given a list of jobs (keys) find those which satisfy their required
+;; cookies and have not been previously activated.
 (defn find-jobs [state jobs]
   (let [satisfied (into #{}
                         (filter #(let [j (definition %)]
@@ -43,8 +42,8 @@
     (set/difference satisfied (get-in state [:jobs :all]))))
 
 ;; Given a collection of jobs, run the setup function for each and
-;; record as being activated. If no job was previously selected,
-;; choose the first one.
+;; record as being activated. If no job was previously selected as
+;; current, choose the first one.
 (defn activate [state jobs]
   (as-> state s
     (reduce #(update-in %1 [:jobs :all] conj %2) s jobs)     ; all jobs ever activated
@@ -63,7 +62,7 @@
                 (get-in state [:jobs :active]))))
 
 ;; Given a collection of jobs, record them as being complete. Select a
-;; new job.
+;; new job as current if there is one available.
 (defn complete [state jobs]
   (as-> state s
     (reduce (fn [state key]
