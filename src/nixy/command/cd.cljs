@@ -6,7 +6,7 @@
    [clojure.string :as str]))
 
 (defmethod command/exec :cd
-  "Change the current working directory."
+  ;; Change the current working directory.
   [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
@@ -18,8 +18,8 @@
        (assoc-in state [fs :filesystem :cwd] (concat cwd [dir])))}))
 
 (defmethod command/args :cd
-  "Accept a valid sub-directory or the special '..' sequence to move
-   up to a parent directory, if one exists."
+  ;; Accept a valid sub-directory or the special '..' sequence to move
+  ;; up to a parent directory, if one exists.
   [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])

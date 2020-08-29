@@ -1,4 +1,6 @@
 (ns nixy.view.character
+  "Character is the top-level UI component which displays the Nixy
+  character."
   (:require
    [nixy.view.shape :as shape]))
 
@@ -7,7 +9,9 @@
 (def width 100)
 (def height 170)
 
-(defn- body [ctx state]
+(defn- body
+  "Draw Nixy's body."
+  [ctx state]
   (aset ctx "lineWidth" (* width 0.03))
   (aset ctx "fillStyle" "white")
   (shape/roundRect ctx
@@ -23,7 +27,9 @@
                    (* height 0.7)
                    (* width 0.1)))
 
-(defn- eyes [ctx state]
+(defn- eyes
+  "Draw Nixy's eyes."
+  [ctx state]
   (aset ctx "fillStyle" "blue")
   (shape/ellipse ctx
                  (- center-x (* width 0.12))
@@ -36,6 +42,9 @@
                  (* width 0.03)
                  (* height 0.07)))
 
-(defn nixy [ctx state]
+(defn nixy
+  "Draw Nixy's body based on `state` to the 2-dimensional canvas
+  `ctx`."
+  [ctx state]
   (body ctx state)
   (eyes ctx state))

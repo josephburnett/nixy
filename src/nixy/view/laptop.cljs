@@ -1,4 +1,6 @@
 (ns nixy.view.laptop
+  "Laptop is the user's input device and the starting point of the
+  Nixy game."
   (:require
    [nixy.state.terminal :as terminal]
    [nixy.guide :as guide]
@@ -9,7 +11,9 @@
 (def width 300)
 (def height 400)
 
-(defn- screen [ctx state]
+(defn- screen
+  "Draw the screen."
+  [ctx state]
   (let [prompt (terminal/prompt state)
         lines (cons prompt
                     (reverse (get-in state [:terminal :output])))]
@@ -30,7 +34,9 @@
                 lines
                 (range)))))
 
-(defn- top [ctx state]
+(defn- top
+  "Draw the top half of the laptop."
+  [ctx state]
   (aset ctx "lineWidth" (* width 0.01))
   (aset ctx "fillStyle" "white")
   (shape/roundRect ctx
@@ -41,7 +47,9 @@
                    (* width 0.02))
   (screen ctx state))
   
-(defn- bottom [ctx state]
+(defn- bottom
+  "Draw the bottom half of the laptop."
+  [ctx state]
   (aset ctx "lineWidth" (* width 0.01))
   (aset ctx "fillStyle" "white")
   (shape/roundRect ctx
@@ -51,7 +59,10 @@
                    (* height 0.48)
                    (* width 0.02)))
 
-(defn- single-key [ctx state guide key ix iy]
+(defn- single-key
+  "Draw a single `key` on the keyboard at location `ix` by
+  `iy`. Display the key's capabilities based on the provided `guide`."
+  [ctx state guide key ix iy]
   (let [key-center-x (+ (- center-x (/ width 2))  ; left side
                         (* width 0.06)            ; left margin
                         (* ix (* width 0.097)))   ; horizontal spacing
@@ -78,12 +89,17 @@
                (- key-center-x (* width 0.025))
                key-center-y)))
 
-(defn- row [ctx state guide keys iy]
+(defn- row
+  "Draw a row of keys on the keyboard."
+  [ctx state guide keys iy]
   (doall (map #(single-key ctx state guide %1 %2 iy)
               keys
               (range))))
 
-(defn draw [ctx state]
+(defn draw
+  "Draw the user's laptop, showing the current terminal output and the
+  keyboard with information from the guide."
+  [ctx state]
   (let [guide (guide/state->guide state)]
     (top ctx state)
     (bottom ctx state)

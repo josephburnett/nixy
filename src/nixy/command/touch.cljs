@@ -1,10 +1,13 @@
 (ns nixy.command.touch
+  "Touch creates empty files."
   (:require
    [nixy.state.terminal :as terminal]
    [nixy.command :as command]
    [clojure.string :as str]))
 
-(defmethod command/exec :touch [{:keys [state args]}]
+(defmethod command/exec :touch
+  ;; Create the files in `state` specified in `args`.
+  [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         filename (str/join (drop 1 args))]
@@ -14,7 +17,10 @@
                {:mod #{:r :w}
                 :cat ""})}))
 
-(defmethod command/args :touch [{:keys [state args]}]
+(defmethod command/args :touch
+  ;; Accept as `args` any valid filename between 1 and 8 characters
+  ;; which is not already taken a file.
+  [{:keys [state args]}]
   (let [fs (get-in state [:terminal :fs])
         cwd (get-in state [fs :filesystem :cwd])
         files (keys (get-in state (concat [fs :filesystem :root] cwd)))

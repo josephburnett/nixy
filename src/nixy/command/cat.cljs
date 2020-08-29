@@ -6,7 +6,7 @@
    [clojure.string :as str]))
 
 (defmethod command/exec :cat
-  "Dump the contents of the named file to `stdout`."
+  ;; Dump the contents of the named file to `stdout`.
   [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
@@ -18,7 +18,7 @@
      :state state}))
 
 (defmethod command/args :cat
-  "Accept filenames which are not commands."
+  ;; Accept filenames which are not commands.
   [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])

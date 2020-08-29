@@ -4,7 +4,7 @@
    [nixy.command :as command]))
 
 (defmethod command/exec :clear
-  "Clear the terminal."
+  ;; Clear the terminal.
   [{:keys [state]}]
   {:stdout []
    :state

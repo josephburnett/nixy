@@ -1,4 +1,6 @@
 (ns nixy.view.bubble
+  "The speech bubble is a top-level UI component which shows the words
+  spoken by Nixy."
   (:require
    [nixy.view.shape :as shape]))
 
@@ -7,7 +9,10 @@
 (def width 200)
 (def height 80)
 
-(defn draw [ctx state]
+(defn draw
+  "Give `state` draw the current speech bubble on the 2-dimensional
+  canvas `ctx`."
+  [ctx state]
   (let [r (* width 0.1)]
     (aset ctx "lineWidth" (* width 0.007))
     (aset ctx "strokeStyle" "black")
