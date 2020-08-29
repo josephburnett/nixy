@@ -1,4 +1,5 @@
 (ns nixy.command.all
+  "Convenient import of all commands."
   (:require
    [nixy.command.cat]
    [nixy.command.cd]

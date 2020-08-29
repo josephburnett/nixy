@@ -1,22 +1,34 @@
-(ns nixy.command)
+(ns nixy.command
+  "Commands are functions which mutate application state. They are
+  embedded in a filesystem as structures with dispatch keys for the
+  `exec` and `args` functions. The `args` multimethod determines what
+  parameters are valid for the command in order to produce a
+  guide. The `exec` multimethod is reponsible for running the command
+  with the given arguments, returning a new application
+  state.
 
-;; Execute the command. Provided keys:
-;; - state -- the current application state
-;; - args  -- the arguments provided to the command
-;; - stdin -- a list of lines output from a previous command
-;; (as well as all keys from the job definition)
+  Commands can take input from stdin and output to
+  stdout. Commands can be pipelined together such that the output of
+  one command becomes the input of the next. The first command begins
+  with an empty input and the last command's output is written to the
+  terminal.")
+
 (defmulti exec
+  "Given valid `args` and `stdin` from the previous command (if any),
+  executes the command by modifying `state`."
   (fn [{:keys [exec-fn]}] exec-fn))
 
-;; Given a partially formed set of parameters, return a map tagging
-;; the potential of the parameters. E.g. {:valid true}
-;; Will be called for each valid key extending the current parameters
-;; to build a map of what can be input next.
-;; 
 (defmulti args
+  "Given `state` and a `line` of partial user input, determines the
+  validity of `line`, returning a map. If the line is valid, the map
+  will include the key `:valid` with a value `true`. Optionally may
+  add other map keys to indicate the capabilities of the line and
+  reasons thereof."
   (fn [{:keys [args-fn]}] args-fn))
 
-(defn archive-line [state]
+(defn archive-line
+  "Move the current line in `state` to history."
+  [state]
   (let [line (get-in state [:terminal :line])
         fs (get-in state [:terminal :fs])
         history (cons line (get-in state [fs :history]))]

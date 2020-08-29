@@ -1,10 +1,13 @@
 (ns nixy.command.cd
+  "Cd changes the current working directory."
   (:require
    [nixy.state.terminal :as terminal]
    [nixy.command :as command]
    [clojure.string :as str]))
 
-(defmethod command/exec :cd [{:keys [state args]}]
+(defmethod command/exec :cd
+  "Change the current working directory."
+  [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         dir (str/join (drop 1 args))]
@@ -14,7 +17,10 @@
        (assoc-in state [fs :filesystem :cwd] (drop-last cwd))
        (assoc-in state [fs :filesystem :cwd] (concat cwd [dir])))}))
 
-(defmethod command/args :cd [{:keys [state args]}]
+(defmethod command/args :cd
+  "Accept a valid sub-directory or the special '..' sequence to move
+   up to a parent directory, if one exists."
+  [{:keys [state args]}]
   (let [fs (terminal/fs state)
         cwd (get-in state [fs :filesystem :cwd])
         current-dir (get-in state (concat [fs :filesystem :root] cwd))]

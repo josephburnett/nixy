@@ -1,4 +1,5 @@
 (ns nixy.event
+  "Core event loops."
   (:require
    [nixy.command :as command]
    [nixy.job :as job]
@@ -7,7 +8,11 @@
    [nixy.state.terminal :as terminal]
    [clojure.string :as str]))
 
-(defn- exec-one [current-state command stdin]
+(defn- exec-one
+  "Given `current-state` run the given `command`. The command will be
+  given `stdin` as input. The command will return a new `state` and
+  `stdout`."
+  [current-state command stdin]
   (let [fs (terminal/fs current-state)
         name (as-> current-state s
                (get-in s [fs :filesystem :root "bin"])
@@ -20,7 +25,12 @@
                                :args args
                                :stdin stdin}))))
 
-(defn- exec-all [current-state commands]
+(defn- exec-all
+  "Given `current-state` and a list of `commands` execute each one in
+  a pipeline, providing the `stdout` of each command to the `stdin` of
+  the next command. The initial `stdin` is an empty collection. The
+  final `state` is returned with the `stdout` of the last command."
+  [current-state commands]
   (reduce (fn [{:keys [state stdout]} command]
             (exec-one state command stdout))
           {:state current-state :stdout []}
@@ -28,7 +38,14 @@
 
 (def all-jobs nixy.job.all/all-jobs)
 
-(defn- run-line [current-state]
+(defn- run-line
+  "Parses a line of user input from `current-state` into individual
+  commands. All commands are executed in a pipeline and the results
+  are echoed to the terminal. The line is then archived to
+  history. Cookies are granted by active jobs. New jobs are
+  activated based on cookies. And active jobs are checked for
+  completion."
+  [current-state]
   (let [echo (terminal/prompt current-state)
         commands (str/split (terminal/line current-state) "|")
         {:keys [state stdout]} (exec-all current-state commands)]
@@ -40,7 +57,10 @@
       (job/activate-new-jobs s all-jobs) ; activate jobs
       (job/complete-active-jobs s))))    ; complete jobs
 
-(defn press-key [current-state key]
+(defn press-key
+  "Dispatch `key` based on `current-guide` constructed from the given
+  `state`."
+  [current-state key]
   (let [current-guide (guide/state->guide current-state)
         valid? #(get-in current-guide [% :valid])]
     (cond

@@ -1,8 +1,11 @@
 (ns nixy.command.clear
+  "Clear removes all output from the terminal."
   (:require
    [nixy.command :as command]))
 
-(defmethod command/exec :clear [{:keys [state]}]
+(defmethod command/exec :clear
+  "Clear the terminal."
+  [{:keys [state]}]
   {:stdout []
    :state
    (as-> state s

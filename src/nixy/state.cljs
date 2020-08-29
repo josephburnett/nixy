@@ -1,4 +1,5 @@
 (ns nixy.state
+  "Initial and current application state."
   (:require
    [nixy.filesystem.nixy :as nixy]
    [nixy.filesystem.laptop :as laptop]))
