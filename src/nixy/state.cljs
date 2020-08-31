@@ -18,9 +18,9 @@
               :line ""
               :output []}
    :cookies #{}
-   :jobs {:current nil
-          :all #{}
-          :active #{}
+   :jobs {:current :tutorial
+          :all #{:tutorial}
+          :active #{:tutorial}
           :complete #{}}})
 
 (def app-state (atom initial-state))

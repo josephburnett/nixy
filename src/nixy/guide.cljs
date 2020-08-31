@@ -65,11 +65,14 @@
   that the key leads toward completion of the job."
   [state]
   (if-let [current (get-in state [:jobs :current])]
-    (let [job (get-in state [:jobs current])
+    ;; guide from current job
+    (let [j (job/definition current)
           partial-line (terminal/line state)
-          pot-fn #(job/guide (merge job {:state state
-                                         :line %}))]
-      (potential-fn->guide pot-fn partial-line))))
+          pot-fn #(job/guide (merge j {:state state
+                                       :line %}))]
+      (potential-fn->guide pot-fn partial-line))
+    ;; no guide
+    {}))
 
 (defn state->guide
   "Build a guide for the given `state` by combining the guides for the
