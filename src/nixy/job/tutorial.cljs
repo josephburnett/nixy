@@ -1,6 +1,7 @@
 (ns nixy.job.tutorial
   "The Tutorial job walks through the various unix commands."
   (:require
+   [clojure.string :as str]
    [nixy.job :as job]))
 
 (defmethod job/definition :tutorial [_]
@@ -11,14 +12,16 @@
    :complete-fn :tutorial
    :required-cookies #{}
    :provides-cookies
-   #{:tutorial-ssh}})
+   #{:tutorial-ssh :tutorial-cd}})
 
 (defmethod job/guide :tutorial
   ;; 
   [{:keys [state line]}]
   (let [at? (complement #(contains? (:cookies state) %))]
     (cond
-      (at? :tutorial-ssh) {}
+      (at? :tutorial-ssh)
+      (if (str/starts-with? "ssh nixy\n" line)
+        {:job true} {})
       (at? :tutorial-cd) {}
       :default {})))
 

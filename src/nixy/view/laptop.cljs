@@ -72,6 +72,9 @@
         key-text (case key
                    "\n" "↵"
                    key)
+        key-text-color (cond
+                         (get-in guide [key :job]) "red"
+                         :else "black")
         key-color (cond
                     (get-in guide [key :valid]) "yellow"
                     :else "white")]
@@ -83,7 +86,7 @@
                      (* height 0.07)              ; key height
                      (* width 0.015))             ; key bevel
     (aset ctx "font" "15px courier")
-    (aset ctx "fillStyle" "black")
+    (aset ctx "fillStyle" key-text-color)
     (.fillText ctx
                key-text
                (- key-center-x (* width 0.025))

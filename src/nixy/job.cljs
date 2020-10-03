@@ -1,6 +1,6 @@
 (ns nixy.job
-  "Jobs are concurrent tasks quests which a user may activate and
-  complete. Jobs are activated by obtaining the required cookies. And
+  "Jobs are concurrent tasks (quests) which a user may activate and
+  complete. Jobs are activated by obtaining the required `cookies`. And
   jobs are completed by following the `guide` to obtain a desired
   application state. Along the way, jobs provide additional cookies
   which may activate other jobs."
