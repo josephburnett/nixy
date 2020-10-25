@@ -2,7 +2,7 @@
   "Core event loops."
   (:require
    [nixy.command :as command]
-   [nixy.job :as job]
+   [nixy.state.job :as job]
    [nixy.job.all]
    [nixy.guide :as guide]
    [nixy.state.terminal :as terminal]
