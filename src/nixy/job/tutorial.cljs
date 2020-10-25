@@ -11,8 +11,7 @@
    :cookies-fn :tutorial
    :complete-fn :tutorial
    :required-cookies #{}
-   :provides-cookies
-   #{:tutorial-ssh :tutorial-cd}})
+   :provides-cookies #{:tutorial-ssh :tutorial-cd}})
 
 (defmethod job/guide :tutorial
   ;; 
@@ -31,11 +30,11 @@
   (let [at? (complement #(contains? (:cookies state) %))]
     (cond
       (at? :tutorial-ssh)
-      (do (print "granting ssh") #{:tutorial-ssh})
+      #{:tutorial-ssh}
       (at? :tutorial-cd)
-      (do (print "granting cd") #{:tutorial-cd})
+      #{:tutorial-cd}
       :default
-      (do (print "no cookies for you") #{}))))
+      #{})))
 
 (defmethod job/complete? :tutorial [{:keys [state]}]
   (contains? (:cookies state) :tutorial-complete))

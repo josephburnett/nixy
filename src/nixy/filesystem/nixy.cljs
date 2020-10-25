@@ -33,6 +33,10 @@
     "jobs"
     {:mod #{:x}
      :exec-fn :jobs
+     :args-fn :enter-only}
+    "log"
+    {:mod #{:x}
+     :exec-fn :log
      :args-fn :enter-only}}
    "usr" {}
    "etc"

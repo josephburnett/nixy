@@ -5,7 +5,8 @@
   application state. Along the way, jobs provide additional cookies
   which may activate other jobs."
   (:require
-   [clojure.set :as set]))
+   [clojure.set :as set]
+   [nixy.state.log :as log]))
 
 (defmulti definition
   "Provides the definition of a job."
@@ -115,4 +116,6 @@
   "Find new cookies and grant them in `state`."
   [state]
   (let [new-cookies (find-cookies state)]
-    (grant state new-cookies)))
+    (as-> state s
+      (reduce log/append s (map #(str "granted cookie: " (name %)) new-cookies))
+      (grant s new-cookies))))

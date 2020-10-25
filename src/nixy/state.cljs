@@ -21,6 +21,7 @@
    :jobs {:current :tutorial
           :all #{:tutorial}
           :active #{:tutorial}
-          :complete #{}}})
+          :complete #{}}
+   :log []})
 
 (def app-state (atom initial-state))
