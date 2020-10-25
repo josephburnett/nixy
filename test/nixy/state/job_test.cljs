@@ -1,9 +1,10 @@
-(ns nixy.job-test
+(ns nixy.state.job-test
   (:require
    [cljs.test :refer-macros [deftest is testing]]
    [nixy.state :as state]
    [nixy.fixtures :refer [deep-merge null-cookies null-guide impossible-cookies null-setup]]
-   [nixy.job :as job]))
+   [nixy.job :as job]
+   [nixy.state.job :as state-job]))
 
 (def ^:dynamic test-job-setup null-setup)
 (def ^:dynamic test-job-guide null-guide)
@@ -52,7 +53,7 @@
                 (binding [test-job-required-cookies require
                           test-state-cookies        have
                           test-state-all-jobs       all]
-                  (job/find-jobs (test-state) [:test-job])))]
+                  (state-job/find-jobs (test-state) [:test-job])))]
     (testing "finds new job satisfying required cookies"
       (is (= #{:test-job} (check {:require #{:test-cookie}
                                   :have    #{:test-cookie}}))      "one cookie")
@@ -74,7 +75,7 @@
   (let [check (fn [jobs]
                 (binding [test-job-setup #(update-in % [:setup-count] inc)]
                   (as-> (assoc (test-state) :setup-count 0) s
-                    (job/activate s jobs)
+                    (state-job/activate s jobs)
                     (:setup-count s))))]
     (testing "runs setup fn"
       (is (= 0              (check []))                   "no jobs to setup")
@@ -83,7 +84,7 @@
                        :test-job]))                       "two jobs to setup")))
   (let [check (fn [key jobs]
                 (as-> (test-state) s
-                  (job/activate s jobs)
+                  (state-job/activate s jobs)
                   (get-in s [:jobs key])))]
     (testing "adds to :jobs"
       (testing "adds to :all"
@@ -98,7 +99,7 @@
                 (binding [test-job-complete? #(:done %)
                           test-state-active-jobs active
                           test-state-current-job current]
-                  (job/find-complete (assoc (test-state) :done done))))]
+                  (state-job/find-complete (assoc (test-state) :done done))))]
   (testing "finds nothing"
     (is (= #{}          (check {:active #{}
                                 :current nil}))        "no active jobs")
@@ -120,7 +121,7 @@
                 (binding [test-state-active-jobs active
                           test-state-current-job current]
                   (as-> (test-state) s
-                    (job/complete s [:test-job])
+                    (state-job/complete s [:test-job])
                     (get-in s [:jobs key]))))]
     (testing "adds to :jobs :complete"
       (is (= #{:test-job}  (check {:key :complete
@@ -153,7 +154,7 @@
                 (binding [test-state-active-jobs active
                           test-state-cookies have
                           test-job-cookies (fn [_] offer)]
-                  (job/find-cookies (test-state))))]
+                  (state-job/find-cookies (test-state))))]
     (testing "finds new cookies"
       (is (= #{:test-cookie} (check {:active #{:test-job}
                                      :have #{}
@@ -181,3 +182,4 @@
       (is (= #{}             (check {:active #{}
                                      :have #{}
                                      :offer #{:test-cookie}}))  "not active"))))
+ 

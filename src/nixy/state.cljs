@@ -18,10 +18,16 @@
               :line ""
               :output []}
    :cookies #{}
-   :jobs {:current :tutorial
-          :all #{:tutorial}
-          :active #{:tutorial}
+   :jobs {:current nil
+          :all #{}
+          :active #{}
           :complete #{}}
    :log []})
 
-(def app-state (atom initial-state))
+(defn with-tutorial [state]
+  (as-> state s
+    (assoc-in s [:jobs :current] :tutorial)
+    (update-in s [:jobs :all] merge :tutorial)
+    (update-in s [:jobs :active] merge :tutorial)))
+
+(def app-state (atom (with-tutorial initial-state)))
