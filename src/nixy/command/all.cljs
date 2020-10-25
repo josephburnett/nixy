@@ -7,6 +7,7 @@
    [nixy.command.config]
    [nixy.command.generic]
    [nixy.command.grep]
+   [nixy.command.jobs]
    [nixy.command.ls]
    [nixy.command.rm]
    [nixy.command.ssh]

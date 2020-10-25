@@ -29,7 +29,11 @@
     "grep"
     {:mod #{:x}
      :exec-fn :grep
-     :args-fn :grep}}
+     :args-fn :grep}
+    "jobs"
+    {:mod #{:x}
+     :exec-fn :jobs
+     :args-fn :enter-only}}
    "usr" {}
    "etc"
    {"config"
