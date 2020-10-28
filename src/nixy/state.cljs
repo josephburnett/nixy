@@ -5,7 +5,8 @@
    [nixy.filesystem.laptop :as laptop]))
 
 (def initial-state
-  {:nixy {:filesystem {:root nixy/fs
+  {:focus :laptop
+   :nixy {:filesystem {:root nixy/fs
                        :cwd []}
           :history []
           :appearance {:blinking :true

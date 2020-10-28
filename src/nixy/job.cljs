@@ -28,3 +28,8 @@
   "A predicate which indicates if the provided job is complete given
   `state`."
   (fn [{:keys [complete-fn]}] complete-fn))
+
+(defmulti post-hook
+  "An hook for the active job to do interesting things to the
+  application state before returning control to the user."
+  (fn [{:keys [post-hook-fn]}] post-hook-fn))

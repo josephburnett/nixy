@@ -4,6 +4,7 @@
    [nixy.state :as state]
    [nixy.view :as view]
    [nixy.event :as event]
+   [nixy.focus.laptop]
    [nixy.command.all]
    [goog.events :as gevents]))
 

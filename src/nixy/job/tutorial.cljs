@@ -10,6 +10,7 @@
    :guide-fn :tutorial
    :cookies-fn :tutorial
    :complete-fn :tutorial
+   :post-hook-fn :nothing
    :required-cookies #{}
    :provides-cookies #{:tutorial-ssh :tutorial-cd}})
 

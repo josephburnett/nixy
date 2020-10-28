@@ -93,3 +93,10 @@
       (reduce log/append s (map #(str "granted cookie: " (name %)) new-cookies))
       (grant s new-cookies))))
 
+(defn current-post-hook [state]
+  (let [current-job (get-in state [:jobs :current])]
+    (if current-job
+      (job/post-hook (merge
+                      (job/definition current-job)
+                      {:state state}))
+      state)))
