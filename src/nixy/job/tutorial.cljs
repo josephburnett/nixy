@@ -20,14 +20,19 @@
   [state k]
   (not (contains? (:cookies state) k)))
 
+(defn after?
+  "After given cookies because it is present."
+  [state k]
+  (contains? (:cookies state) k))
+
 (defmethod job/guide :tutorial
   ;; Guide toward the next stage.
   [{:keys [state line]}]
   (cond
-    (at? state :tutorial-ssh)
-    (if (str/starts-with? "ssh nixy\n" line)
+    (and (after? state :tutorial-explain-keyboard)
+         (at? state :tutorial-jobs))
+    (if (str/starts-with? "jobs\n" line)
       {:job true} {})
-    (at? state :tutorial-cd) {}
     :default {}))
 
 (defmethod job/cookies :tutorial
@@ -37,10 +42,14 @@
     (at? state :tutorial-start)
     #{:tutorial-start}
     (at? state :tutorial-ssh)
-    (if (some #(= "ssh nixy" %) (get-in state [:nixy :history]))
+    (if (= "ssh nixy" (first (get-in state [:nixy :history])))
       #{:tutorial-ssh} #{})
-    (at? state :tutorial-cd)
-    #{:tutorial-cd}
+    (at? state :tutorial-explain-keyboard)
+    (if (= 2 (count (get-in state [:nixy :history])))
+      #{:tutorial-explain-keyboard} #{})
+    (at? state :tutorial-jobs)
+    (if (= "jobs" (first (get-in state [:nixy :history])))
+      #{:tutorial-jobs} #{})
     :default
     #{}))
 
@@ -62,6 +71,28 @@
                  "But first you have to connect to me."
                  "Type \"ssh nixy\" on your keyboard,"
                  "and then press enter."])
+    (at? state :tutorial-explain-keyboard)
+    (dialog/add state
+                ["Nice job!"
+                 "Now you are connected to me, nixy."
+                 "Use your keyboard to type a command."
+                 "Anything will do."
+                 "The highlighted keys will guide you."])
+    (at? state :tutorial-jobs)
+    (dialog/add state
+                ["You are really getting the hang of this!"
+                 "Now, I have a job for you."
+                 "I need your help to fix"
+                 "a glitch in my system."
+                 "But first, let's make sure"
+                 "you know how to manage jobs."
+                 "Type \"jobs\"."
+                 "The red keys will guide you."])
+    (at? state :tutorial-explain-jobs)
+    (dialog/add state
+                ["Bravo!"
+                 "As you can see,"
+                 "your current job is the tutorial."])
     :default state))
       
                  
