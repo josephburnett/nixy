@@ -74,9 +74,10 @@
                    "\n" "↵"
                    key)
         key-text-color (cond
-                         (and focused (get-in guide [key :job])) "red"
+                         (and focused (get-in guide [key :job])) "white"
                          :else "black")
         key-color (cond
+                    (and focused (get-in guide [key :job])) "#e66"
                     (and focused (get-in guide [key :valid])) "yellow"
                     :else "white")]
     (aset ctx "fillStyle" key-color)

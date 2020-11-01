@@ -6,7 +6,7 @@
 
 (def center-x 300)
 (def center-y 50)
-(def width 300)
+(def width 350)
 (def height 80)
 
 (defn draw
@@ -67,6 +67,7 @@
       (.fill ctx)
       (let [dialog (:dialog state)]
         (when-not (empty? dialog)
+          (aset ctx "font" "15px courier")
           (aset ctx "fillStyle" "black")
           (.fillText ctx
                      (first (:dialog state))

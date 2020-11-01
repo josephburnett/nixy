@@ -66,26 +66,29 @@
                  "I am a unix computer."
                  "I am connected to the network,"
                  "just like your laptop."
-                 "You can send me commands over the network,"
-                 "by typing on your laptop keyboard."
-                 "But first you have to connect to me."
+                 "You can send me commands"
+                 "over the network by typing"
+                 "on your laptop keyboard."
+                 "But first you must connect to me."
                  "Type \"ssh nixy\" on your keyboard,"
                  "and then press enter."])
     (at? state :tutorial-explain-keyboard)
     (dialog/add state
-                ["Nice job!"
-                 "Now you are connected to me, nixy."
-                 "Use your keyboard to type a command."
-                 "Anything will do."
-                 "The highlighted keys will guide you."])
+                ["Nice job! Now you are"
+                 "connected to me, nixy."
+                 "Use your keyboard to type"
+                 "a command. Anything will do."
+                 "The highlighted keys"
+                 "will guide you."])
     (at? state :tutorial-jobs)
     (dialog/add state
-                ["You are really getting the hang of this!"
+                ["You are really getting"
+                 "the hang of this!"
                  "Now, I have a job for you."
                  "I need your help to fix"
                  "a glitch in my system."
                  "But first, let's make sure"
-                 "you know how to manage jobs."
+                 "you know how to manage a job."
                  "Type \"jobs\"."
                  "The red keys will guide you."])
     (at? state :tutorial-explain-jobs)
