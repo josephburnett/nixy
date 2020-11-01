@@ -4,9 +4,9 @@
   (:require
    [nixy.view.shape :as shape]))
 
-(def center-x 250)
+(def center-x 300)
 (def center-y 50)
-(def width 200)
+(def width 300)
 (def height 80)
 
 (defn draw
@@ -62,4 +62,12 @@
     (.lineTo ctx
              (- center-x (* width 0.5))
              center-y)
-    (.stroke ctx)))
+    (.stroke ctx)
+    (let [dialog (:dialog state)]
+      (when-not (empty? dialog)
+        (aset ctx "fillStyle" "black")
+        (.fillText ctx
+                   (first (:dialog state))
+                   (- center-x (* width 0.35))
+                   center-y)))))
+               

@@ -13,5 +13,5 @@
       (assoc-in s [:nixy :speech-bubble-text] []))
     ;; Advance to the next line of dialog.
     (as-> state s
-      (update-in s [:nixy :speech-bubble-text] (first (:dialog s)))
-      (update-in s [:dialog] rest))))
+      (assoc-in s [:nixy :speech-bubble-text] (first (:dialog s)))
+      (assoc-in s [:dialog] (rest (:dialog s))))))

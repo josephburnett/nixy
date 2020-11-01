@@ -1,12 +1,15 @@
 (ns ^:figwheel-hooks nixy.core
   (:require
-   [nixy.guide :as guide]
-   [nixy.state :as state]
-   [nixy.view :as view]
-   [nixy.event :as event]
-   [nixy.focus.laptop]
    [nixy.command.all]
-   [goog.events :as gevents]))
+   [nixy.event :as event]
+   [goog.events :as gevents]
+   [nixy.focus.laptop]
+   [nixy.focus.dialog]
+   [nixy.guide :as guide]
+   [nixy.job.all]
+   [nixy.state :as state]
+   [nixy.state.plot :as plot]
+   [nixy.view :as view]))
 
 ;; specify reload hook with ^;after-load metadata
 (defn ^:after-load on-reload []
@@ -23,4 +26,5 @@
  goog.events.EventType.KEYDOWN
  on-key-down)
 
+(swap! state/app-state plot/advance)
 (view/render @state/app-state)
