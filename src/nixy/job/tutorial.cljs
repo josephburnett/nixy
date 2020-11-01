@@ -37,7 +37,8 @@
     (at? state :tutorial-start)
     #{:tutorial-start}
     (at? state :tutorial-ssh)
-    #{:tutorial-ssh}
+    (if (some #(= "ssh nixy" %) (get-in state [:nixy :history]))
+      #{:tutorial-ssh} #{})
     (at? state :tutorial-cd)
     #{:tutorial-cd}
     :default
