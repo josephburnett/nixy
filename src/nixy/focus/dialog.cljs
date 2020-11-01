@@ -6,7 +6,7 @@
 (defmethod event/press-key :dialog
   ;; Continue the dialog to completion.
   [state _]
-  (if (empty? (:dialog state))
+  (if (> 2 (count (:dialog state)))
     ;; Focus back on the laptop.
     (as-> state s
       (assoc s :focus :laptop)

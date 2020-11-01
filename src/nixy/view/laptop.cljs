@@ -63,7 +63,8 @@
   "Draw a single `key` on the keyboard at location `ix` by
   `iy`. Display the key's capabilities based on the provided `guide`."
   [ctx state guide key ix iy]
-  (let [key-center-x (+ (- center-x (/ width 2))  ; left side
+  (let [focused (= :laptop (:focus state))
+        key-center-x (+ (- center-x (/ width 2))  ; left side
                         (* width 0.06)            ; left margin
                         (* ix (* width 0.097)))   ; horizontal spacing
         key-center-y (+ center-y                  ; top
@@ -73,10 +74,10 @@
                    "\n" "↵"
                    key)
         key-text-color (cond
-                         (get-in guide [key :job]) "red"
+                         (and focused (get-in guide [key :job])) "red"
                          :else "black")
         key-color (cond
-                    (get-in guide [key :valid]) "yellow"
+                    (and focused (get-in guide [key :valid])) "yellow"
                     :else "white")]
     (aset ctx "fillStyle" key-color)
     (shape/roundRect ctx
